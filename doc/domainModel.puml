@@ -1,0 +1,32 @@
+@startuml
+!pragma layout smetana
+
+Object User
+Object Part
+Object Order
+Object Quote
+Object Rafter
+Object Rooftile
+Object Post
+Object Plank
+Object Lath
+Object Fitting
+Object Screw
+Object Carport
+Object Calculator
+Object PartsList
+
+User --* Order
+Order --* Carport
+Order --* PartsList
+Carport --* Part
+Part --|> Rafter
+Part --|> Rooftile
+Part --|> Post
+Part --|> Plank
+Part --|> Lath
+Part --|> Fitting
+Part --|> Screw
+
+
+@enduml

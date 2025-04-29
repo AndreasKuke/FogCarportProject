@@ -1,0 +1,40 @@
+@startuml
+!pragma layout smetana
+
+Class User {
+- int id
+- String username
+- String password
+- String email
+- String phoneNumber
+- boolean isAdmin
+
+}
+
+Class Order {
+- int id
+- int price
+- Carport carport
+}
+
+Class Part {
+- int id
+- int amount
+- int length
+- int unit
+}
+
+Class Carport {
+- ArrayList <Part> partList
+}
+
+
+User --* Order
+Order --* Carport
+Carport --* Part
+
+Package util {
+Class Calculator
+}
+
+@enduml
