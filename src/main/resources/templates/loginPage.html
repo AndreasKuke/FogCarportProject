@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log ind | Fog Carport</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="content-wrapper">
+    <div class="container">
+        <h2>Log ind</h2>
+        <form th:action="@{/login}" method="post" class="form">
+            <label for="identifier">Brugernavn eller Email:</label>
+            <input type="text" id="identifier" name="identifier" required>
+
+            <label for="password">Adgangskode:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit" class="button">Log ind</button>
+        </form>
+        <p>Har du ikke en konto? <a href="/register">Opret en her</a></p>
+    </div>
+</div>
+</body>
+</html>
