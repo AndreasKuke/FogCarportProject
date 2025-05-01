@@ -1,4 +1,73 @@
 package app.entities;
 
 public class Order {
+
+    int order_ID;
+    int carport_height;
+    int carport_width;
+    int carport_length;
+    double date;
+    boolean status;
+
+    public Order(int order_ID, double date) {
+        this.order_ID = order_ID;
+        this.date = date;
+    }
+
+    public Order(int order_ID, double date, int carport_height, int carport_width, int carport_length, boolean status) {
+        this.order_ID = order_ID;
+        this.date = date;
+        this.carport_height = carport_height;
+        this.carport_width = carport_width;
+        this.carport_length = carport_length;
+        this.status = status;
+    }
+
+    public int getOrder_ID() {
+        return order_ID;
+    }
+
+    public void setOrder_ID(int order_ID) {
+        this.order_ID = order_ID;
+    }
+
+    public int getCarport_height() {
+        return carport_height;
+    }
+
+    public void setCarport_height(int carport_height) {
+        this.carport_height = carport_height;
+    }
+
+    public int getCarport_width() {
+        return carport_width;
+    }
+
+    public void setCarport_width(int carport_width) {
+        this.carport_width = carport_width;
+    }
+
+    public int getCarport_length() {
+        return carport_length;
+    }
+
+    public void setCarport_length(int carport_length) {
+        this.carport_length = carport_length;
+    }
+
+    public double getDate() {
+        return date;
+    }
+
+    public void setDate(double date) {
+        this.date = date;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 }
