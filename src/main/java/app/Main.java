@@ -21,8 +21,23 @@ public class Main {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
     public static void main(String[] args) {
+        Javalin app = Javalin.create(config -> {
+            config.staticFiles.add("/public");
+            config.jetty.modifyServletContextHandler(handler -> handler.setSessionHandler(SessionConfig.sessionConfig()));
+            config.fileRenderer(new JavalinThymeleaf(ThymeleafConfig.templateEngine()));
+        }).start(7070);
 
+        app.before(ctx -> {
+            ctx.attribute("session", ctx.sessionAttributeMap());
+        });
 
+        app.get("/", ctx -> ctx.redirect("/index"));
+        app.get("/index", ctx -> ctx.render("index.html"));
+
+        // login routes
+        app.get("/login", ctx -> ctx.render("loginPage.html"));
+        app.get("/register", ctx -> ctx.render("registerPage.html"));
 
     }
+
 }

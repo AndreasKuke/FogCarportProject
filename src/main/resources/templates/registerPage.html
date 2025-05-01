@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opret konto | Fog Carport</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="content-wrapper">
+    <div class="container">
+        <h2>Opret en konto</h2>
+        <form th:action="@{/register}" method="post" class="form">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="username">Brugernavn:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Adgangskode:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="confirmPassword">Bekræft adgangskode:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+            <label for="phone">Telefonnummer:</label>
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{8}" required>
+
+            <button type="submit" class="button">Opret konto</button>
+        </form>
+        <p>Har du allerede en konto? <a href="/login">Log ind her</a></p>
+    </div>
+</div>
+</body>
+</html>
