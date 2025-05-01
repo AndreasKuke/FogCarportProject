@@ -1,6 +1,10 @@
 @startuml
 !pragma layout smetana
 
+User --* Order
+Order --* Carport
+Carport --* Part
+
 Class User {
 - int id
 - String username
@@ -15,6 +19,7 @@ Class Order {
 - int id
 - int price
 - Carport carport
+- boolean status
 }
 
 Class Part {
@@ -28,13 +33,40 @@ Class Carport {
 - ArrayList <Part> partList
 }
 
-
-User --* Order
-Order --* Carport
-Carport --* Part
-
 Package util {
 Class Calculator
+
+Class CarportMapper{
+
 }
 
+Class OrderMapper{
+
+}
+
+Class PartMapper{
+
+}
+
+Class UserMapper{
+
+}
+
+Class CarportController{
+
+}
+
+Class OrderController{
+
+}
+
+Class PartController{
+
+}
+
+Class UserController{
+
+}
+
+}
 @enduml
