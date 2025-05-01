@@ -23,6 +23,10 @@ public class Order {
         this.status = status;
     }
 
+    public Order(int order_ID) {
+        this.order_ID = order_ID;
+    }
+
     public int getOrder_ID() {
         return order_ID;
     }

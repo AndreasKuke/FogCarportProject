@@ -9,21 +9,21 @@ public class User {
     String phonenumber;
     boolean role;
 
-    public User(User user) {
-        this.user_ID = user.user_ID;
+    public User(int user_ID) {
+        this.user_ID = user_ID;
     }
 
-    public User(User user, String username, String password, String email, String phonenumber) {
-        this.user_ID = user.user_ID;
-        this.username = user.username;
+    public User(int user_ID, String username, String password, String email, String phonenumber) {
+        this.user_ID = user_ID;
+        this.username = username;
         this.password = password;
         this.email = email;
         this.phonenumber = phonenumber;
     }
 
-    public User(User user, String username, String password, String email, String phonenumber, boolean role) {
-        this.user_ID = user.user_ID;
-        this.username = user.username;
+    public User(int user_ID, String username, String password, String email, String phonenumber, boolean role) {
+        this.user_ID = user_ID;
+        this.username = username;
         this.password = password;
         this.email = email;
         this.phonenumber = phonenumber;
