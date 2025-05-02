@@ -39,4 +39,8 @@ public class UserMapper {
         }
         return null;
     }
+
+    public User getUserByEmail (String email){
+        String sql = "SELECT * FROM users WHERE "
+    }
 }
