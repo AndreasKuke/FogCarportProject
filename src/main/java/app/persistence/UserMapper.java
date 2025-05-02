@@ -39,4 +39,49 @@ public class UserMapper {
         }
         return null;
     }
+
+    public User getUserByEmail (String email){
+        String sql = "SELECT * FROM users WHERE user_mail = ?";
+
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                return new User(
+                        rs.getInt("user_id"),
+                        rs.getString("user_name"),
+                        rs.getString("user_password"),
+                        rs.getString("user_mail"),
+                        rs.getString("user_phonenumber"),
+                        rs.getBoolean("user_role")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void createUser(String email, String password, String phoneNumber, String name){
+        String sql = "INSERT INTO users (user_name, user_password, user_mail, user_phonenumber, user_role) " +
+                "VALUES (?, ?, ?, ?, false)";
+
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setString(1, name);
+            stmt.setString(2, password);
+            stmt.setString(3, email);
+            stmt.setString(4, phoneNumber);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
