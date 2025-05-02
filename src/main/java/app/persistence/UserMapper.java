@@ -61,7 +61,7 @@ public class UserMapper {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
+        }return null;
     }
 
     public void createUser(String email, String password, String phoneNumber, String name){
@@ -71,15 +71,16 @@ public class UserMapper {
         try (Connection conn = connectionPool.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)){
 
+            System.out.println("HELLO");
+
             stmt.setString(1, name);
             stmt.setString(2, password);
             stmt.setString(3, email);
             stmt.setString(4, phoneNumber);
-            ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()){
+            stmt.executeUpdate();
 
-            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
