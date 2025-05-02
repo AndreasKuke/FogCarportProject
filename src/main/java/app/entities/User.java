@@ -2,40 +2,40 @@ package app.entities;
 
 public class User {
 
-    int user_ID;
+    int userId;
     String username;
     String password;
     String email;
-    String phonenumber;
+    String phoneNumber;
     boolean role;
 
-    public User(int user_ID) {
-        this.user_ID = user_ID;
+    public User(int userId) {
+        this.userId = userId;
     }
 
-    public User(int user_ID, String username, String password, String email, String phonenumber) {
-        this.user_ID = user_ID;
+    public User(int userId, String username, String password, String email, String phoneNumber) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.email = email;
-        this.phonenumber = phonenumber;
+        this.phoneNumber = phoneNumber;
     }
 
-    public User(int user_ID, String username, String password, String email, String phonenumber, boolean role) {
-        this.user_ID = user_ID;
+    public User(int userId, String username, String password, String email, String phoneNumber, boolean role) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.email = email;
-        this.phonenumber = phonenumber;
+        this.phoneNumber = phoneNumber;
         this.role = role;
     }
 
     public int getUser_ID() {
-        return user_ID;
+        return userId;
     }
 
-    public void setUser_ID(int user_ID) {
-        this.user_ID = user_ID;
+    public void setUser_ID(int userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -62,12 +62,12 @@ public class User {
         this.email = email;
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public boolean isRole() {
