@@ -11,7 +11,7 @@ public class UserController {
     );
     private static final UserMapper userMapper = new UserMapper(connectionPool);
     public static void loginUser(Context ctx) {
-        String email = ctx.formParam("username");
+        String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
         User user = userMapper.getUserByEmail(email);
