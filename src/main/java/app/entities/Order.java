@@ -1,20 +1,22 @@
 package app.entities;
 
+import java.sql.Date;
+
 public class Order {
 
     int order_ID;
     int carport_height;
     int carport_width;
     int carport_length;
-    double date;
+    Date date;
     boolean status;
 
-    public Order(int order_ID, double date) {
+    public Order(int order_ID, Date date) {
         this.order_ID = order_ID;
         this.date = date;
     }
 
-    public Order(int order_ID, double date, int carport_height, int carport_width, int carport_length, boolean status) {
+    public Order(int order_ID, Date date, int carport_height, int carport_width, int carport_length, boolean status) {
         this.order_ID = order_ID;
         this.date = date;
         this.carport_height = carport_height;
@@ -59,11 +61,11 @@ public class Order {
         this.carport_length = carport_length;
     }
 
-    public double getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(double date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

@@ -48,10 +48,12 @@
     </div>
 </header>
 
+
 <div class="content-wrapper">
 <div class="container">
     <h2>Design din drømme carport!</h2>
     <p>Vælg dine foretrukne mål og få din drøm ført til virkelighed:</p>
+    <form action="/create-order" method="POST">
     <div class="selection">
         <select name="carport-width-selection" id="carport-width-selection" required>
             <option value="" disabled selected>Carport bredde</option>
@@ -95,8 +97,18 @@
             </option>
         </select>
 
+        <select name="carport-height-selection" id="carport-height-selection" required>
+            <option value="" disabled selected>Carport højde</option>
+            <option value="240">240 cm</option>
+            <option value="270">270 cm</option>
+            <option value="300">300 cm</option>
+            <option value="330">330 cm</option>
+            <option value="360">360 cm</option>
+        </select>
+
     </div>
     <button class="button">Bestil tilbud</button>
+    </form>
 </div>
 </div>
 
