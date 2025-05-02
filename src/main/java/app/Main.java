@@ -3,6 +3,7 @@ package app;
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
 import app.controllers.OrderController;
+import app.controllers.UserController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
@@ -41,6 +42,8 @@ public class Main {
         // login routes
         app.get("/login", ctx -> ctx.render("loginPage.html"));
         app.get("/register", ctx -> ctx.render("registerPage.html"));
+        app.post("/register", UserController::registerUser);
+        app.post("/login", UserController::loginUser);
 
 
         // order routes

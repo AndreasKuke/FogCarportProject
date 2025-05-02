@@ -18,6 +18,7 @@ public class UserController {
 
         if (user != null && user.getPassword().equals(password)) {
             ctx.sessionAttribute("user", user);
+            ctx.redirect("/index");
 
         } else {
             ctx.sessionAttribute("Error", "Invalid username or password.");
@@ -26,14 +27,14 @@ public class UserController {
     }
 
     public static void registerUser(Context ctx) {
-        String email = ctx.formParam("username");
+        String email = ctx.formParam("email");
         String password = ctx.formParam("password");
         String confirmPassword = ctx.formParam("confirm-password");
-        String phoneNumber = ctx.formParam("phoneNumber");
-        String name = ctx.formParam("name");
+        String phoneNumber = ctx.formParam("phone");
+        String name = ctx.formParam("username");
 
 
-        User existingUser = UserMapper.getUserByEmail(email);
+        User existingUser = userMapper.getUserByEmail(email);
         if (existingUser != null) {
             ctx.sessionAttribute("Error", "Username already exists.");
             ctx.redirect("/register");
