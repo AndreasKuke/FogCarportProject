@@ -1,15 +1,20 @@
 package app.controllers;
 
+import app.persistence.ConnectionPool;
+import app.persistence.UserMapper;
 import app.entities.User;
 import io.javalin.http.Context;
 
 public class UserController {
-
+    private static final ConnectionPool connectionPool = ConnectionPool.getInstance(
+            "postgres", "postgres", "jdbc:postgresql://localhost:5432/%s?currentSchema=public", "cupcake"
+    );
+    private static final UserMapper userMapper = new UserMapper(connectionPool);
     public static void loginUser(Context ctx) {
         String email = ctx.formParam("username");
         String password = ctx.formParam("password");
 
-        User user = UserMapper.getUserByEmail(email);
+        User user = userMapper.getUserByEmail(email);
 
         if (user != null && user.getPassword().equals(password)) {
             ctx.sessionAttribute("user", user);
@@ -24,6 +29,8 @@ public class UserController {
         String email = ctx.formParam("username");
         String password = ctx.formParam("password");
         String confirmPassword = ctx.formParam("confirm-password");
+        String phoneNumber = ctx.formParam("phoneNumber");
+        String name = ctx.formParam("name");
 
 
         User existingUser = UserMapper.getUserByEmail(email);
@@ -36,7 +43,7 @@ public class UserController {
             ctx.redirect("/register");
         }
         else {
-            UserMapper.createUser(email, password);
+            userMapper.createUser(email, password, phoneNumber, name);
             ctx.redirect("/login");
         }
     }
