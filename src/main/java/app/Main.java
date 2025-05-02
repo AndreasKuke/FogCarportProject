@@ -2,6 +2,7 @@ package app;
 
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
+import app.controllers.OrderController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
@@ -19,6 +20,9 @@ public class Main {
     private static final String DB = "carport";
 
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
+
+    // Controllers
+    private static final OrderController orderController = new OrderController(connectionPool);
 
     public static void main(String[] args) {
         Javalin app = Javalin.create(config -> {
@@ -38,6 +42,12 @@ public class Main {
         app.get("/login", ctx -> ctx.render("loginPage.html"));
         app.get("/register", ctx -> ctx.render("registerPage.html"));
 
+
+        // order routes
+        app.post("/create-order", ctx -> {
+            orderController.OrderCreate(ctx);
+
+        });
     }
 
 }

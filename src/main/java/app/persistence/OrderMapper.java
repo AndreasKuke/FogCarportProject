@@ -12,7 +12,7 @@ public class OrderMapper {
 
     private final ConnectionPool connectionPool;
 
-    public OrderMapper(ConnectionPool connectionPool) {
+    public  OrderMapper(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 
@@ -28,7 +28,7 @@ public class OrderMapper {
             if(rs.next()) {
                 return new Order(
                         rs.getInt("order_id"),
-                        rs.getDouble("date"),
+                        rs.getDate("date"),
                         rs.getInt("carport_height"),
                         rs.getInt("carport_width"),
                         rs.getInt("carport_length"),
@@ -39,5 +39,25 @@ public class OrderMapper {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void insertOrder(Order order) throws DatabaseException {
+        String sql = "INSERT into orders (carport_height, carport_width, carport_length, date, status) " +
+                "VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = connectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setInt(1, order.getCarport_height());
+            stmt.setInt(2, order.getCarport_width());
+            stmt.setInt(3, order.getCarport_length());
+            stmt.setDate(4, order.getDate());
+            stmt.setBoolean(5,order.isStatus());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
