@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.UserMapper;
 import app.entities.User;
@@ -10,19 +11,25 @@ public class UserController {
             "postgres", "postgres", "jdbc:postgresql://localhost:5432/%s?currentSchema=public", "cupcake"
     );
     private static final UserMapper userMapper = new UserMapper(connectionPool);
+
     public static void loginUser(Context ctx) {
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
-        User user = userMapper.getUserByEmail(email);
+        try {
+            User user = userMapper.getUserByEmail(email);
 
-        if (user != null && user.getPassword().equals(password)) {
-            ctx.sessionAttribute("user", user);
-            ctx.redirect("/index");
+            if (user != null && user.getPassword().equals(password)) {
+                ctx.sessionAttribute("currentUser", user);
+                ctx.redirect("/index");
 
-        } else {
-            ctx.sessionAttribute("Error", "Invalid username or password.");
-            ctx.redirect("/login");
+            } else {
+                ctx.sessionAttribute("Error", "Invalid username or password.");
+                ctx.redirect("/login");
+            }
+        }catch ( Exception e ) {
+            ctx.sessionAttribute("Error", e.getMessage());
+            ctx.render("loginPage.html");
         }
     }
 
