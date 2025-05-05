@@ -1,6 +1,7 @@
 package app.controllers;
 
 import app.entities.Order;
+import app.entities.User;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import io.javalin.http.Context;
@@ -21,13 +22,21 @@ public class OrderController {
 public static void OrderCreate(Context ctx) {
 
     try {
+        User currentUser = ctx.sessionAttribute("currentUser");
+        if (currentUser == null) {
+            ctx.attribute("message", "Du skal logge ind for at kunne fuldføre din bestilling.");
+            ctx.render("loginPage.html");
+        }
+
         int width = Integer.parseInt(ctx.formParam("carport-width-selection"));
         int height = Integer.parseInt(ctx.formParam("carport-height-selection"));
         int length = Integer.parseInt(ctx.formParam("carport-length-selection"));
         Date date = new Date(System.currentTimeMillis());
         boolean status = false;
 
-        Order order = new Order(0, date, width, height, length, status);
+        int userID = currentUser.getUser_ID();
+
+        Order order = new Order(userID, 0, date, width, height, length, status);
 
         OrderMapper orderMapper = new OrderMapper(connectionPool);
         orderMapper.insertOrder(order);

@@ -42,8 +42,8 @@ public class OrderMapper {
     }
 
     public void insertOrder(Order order) throws DatabaseException {
-        String sql = "INSERT into orders (carport_height, carport_width, carport_length, date, status) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT into orders (carport_height, carport_width, carport_length, date, status, user_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = connectionPool.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -53,6 +53,7 @@ public class OrderMapper {
             stmt.setInt(3, order.getCarport_length());
             stmt.setDate(4, order.getDate());
             stmt.setBoolean(5,order.isStatus());
+            stmt.setInt(6, order.getUser_ID());
 
             stmt.executeUpdate();
 
