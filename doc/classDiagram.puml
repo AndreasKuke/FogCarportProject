@@ -12,7 +12,6 @@ Class User {
 - String email
 - String phoneNumber
 - boolean isAdmin
-
 }
 
 Class Order {
@@ -41,15 +40,19 @@ Class CarportMapper{
 }
 
 Class OrderMapper{
-
++Order getOrder(int id)
++void insertOrder(Order order)
++List<Order> getAllOrders()
 }
 
 Class PartMapper{
-
++Part getPartByID(int id)
 }
 
 Class UserMapper{
-
++User getUserByEmail(String email)
++User getUserByID(int id)
++void createUser(String email, String password, String phoneNumber, String name)
 }
 
 Class CarportController{
@@ -57,7 +60,7 @@ Class CarportController{
 }
 
 Class OrderController{
-
++void OrderCreate(Context ctx)
 }
 
 Class PartController{
@@ -65,7 +68,9 @@ Class PartController{
 }
 
 Class UserController{
-
++void loginUser(Context ctx)
++void registerUser(Context ctx)
++void logout(Context ctx)
 }
 
 }

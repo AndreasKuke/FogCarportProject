@@ -7,6 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.sql.Date;
 
 public class OrderMapper {
 
@@ -60,5 +63,48 @@ public class OrderMapper {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void updateOrder(Order order) throws DatabaseException {
+        String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
+
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Order> getAllOrders() throws DatabaseException {
+        String sql = "SELECT * FROM orders";
+
+        List<Order> orders = new ArrayList<>();
+
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Order order = new Order(
+                        rs.getInt("user_id"),
+                        rs.getInt("order_id"),
+                        rs.getDate("date"),
+                        rs.getInt("carport_height"),
+                        rs.getInt("carport_width"),
+                        rs.getInt("carport_length"),
+                        rs.getBoolean("status"));
+
+                orders.add(order);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return orders;
     }
 }
