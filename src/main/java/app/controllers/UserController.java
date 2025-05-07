@@ -10,7 +10,7 @@ import io.javalin.http.Context;
 
 public class UserController {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(
-            "postgres", "postgres", "jdbc:postgresql://localhost:5432/%s?currentSchema=public", "cupcake"
+            "postgres", "postgres", "jdbc:postgresql://localhost:5432/%s?currentSchema=public", "carport"
     );
     private static final UserMapper userMapper = new UserMapper(connectionPool);
 
