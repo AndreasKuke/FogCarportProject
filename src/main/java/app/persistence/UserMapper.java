@@ -86,4 +86,23 @@ public class UserMapper {
             throw new RuntimeException(e);
         }
     }
+
+    public String getUserPasswordFromDB(String email){
+        String sql = "SELECT user_password FROM users WHERE user_mail = ?";
+
+        try (Connection conn = connectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()){
+                return rs.getString("user_password");
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
