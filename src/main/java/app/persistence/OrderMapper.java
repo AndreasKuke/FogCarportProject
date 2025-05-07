@@ -96,7 +96,8 @@ public class OrderMapper {
                         rs.getInt("carport_height"),
                         rs.getInt("carport_width"),
                         rs.getInt("carport_length"),
-                        rs.getBoolean("status"));
+                        rs.getBoolean("status"),
+                        rs.getInt("price"));
 
                 orders.add(order);
             }

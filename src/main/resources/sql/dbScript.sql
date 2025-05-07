@@ -13,17 +13,25 @@ CREATE TABLE IF NOT EXISTS public.orders
     carport_length numeric NOT NULL,
     date date NOT NULL,
     status boolean NOT NULL,
+    price integer,
     CONSTRAINT orders_pkey PRIMARY KEY (order_id)
-);
+    );
 
 CREATE TABLE IF NOT EXISTS public."partDetails"
 (
     "partDetails_id" serial NOT NULL,
-    part_id serial NOT NULL,
-    part_amount integer NOT NULL,
-    part_length integer NOT NULL,
+    part_length integer,
+    "partVariant_id" serial NOT NULL,
     CONSTRAINT "partDetails_pkey" PRIMARY KEY ("partDetails_id")
-);
+    );
+
+CREATE TABLE IF NOT EXISTS public."partVariant"
+(
+    "partVariant_id" serial NOT NULL,
+    part_amount integer NOT NULL,
+    part_id serial NOT NULL,
+    CONSTRAINT "partVariant_pkey" PRIMARY KEY ("partVariant_id")
+    );
 
 CREATE TABLE IF NOT EXISTS public.parts
 (
@@ -31,8 +39,9 @@ CREATE TABLE IF NOT EXISTS public.parts
     part_name character varying COLLATE pg_catalog."default" NOT NULL,
     part_unit character varying COLLATE pg_catalog."default",
     part_description character varying COLLATE pg_catalog."default",
+    price numeric NOT NULL,
     CONSTRAINT parts_pkey PRIMARY KEY (part_id)
-);
+    );
 
 CREATE TABLE IF NOT EXISTS public.users
 (
@@ -43,13 +52,13 @@ CREATE TABLE IF NOT EXISTS public.users
     user_phonenumber character varying COLLATE pg_catalog."default" NOT NULL,
     user_role boolean NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (user_id)
-);
+    );
 
 ALTER TABLE IF EXISTS public.orders
     ADD CONSTRAINT "orders_partDetails_id_fkey" FOREIGN KEY ("partDetails_id")
     REFERENCES public."partDetails" ("partDetails_id") MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+       ON DELETE NO ACTION
     NOT VALID;
 
 
@@ -57,15 +66,23 @@ ALTER TABLE IF EXISTS public.orders
     ADD CONSTRAINT orders_user_id_fkey FOREIGN KEY (user_id)
     REFERENCES public.users (user_id) MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+       ON DELETE NO ACTION
     NOT VALID;
 
 
 ALTER TABLE IF EXISTS public."partDetails"
-    ADD CONSTRAINT "partDetails_part_id_fkey" FOREIGN KEY (part_id)
+    ADD CONSTRAINT "partDetails_partVariant_id_fkey" FOREIGN KEY ("partVariant_id")
+    REFERENCES public."partVariant" ("partVariant_id") MATCH SIMPLE
+    ON UPDATE NO ACTION
+       ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public."partVariant"
+    ADD CONSTRAINT "partVariant_part_id_fkey" FOREIGN KEY (part_id)
     REFERENCES public.parts (part_id) MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION
+       ON DELETE NO ACTION
     NOT VALID;
 
 END;
