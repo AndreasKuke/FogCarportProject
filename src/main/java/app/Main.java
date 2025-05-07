@@ -36,15 +36,7 @@ public class Main {
             ctx.attribute("session", ctx.sessionAttributeMap());
         });
 
-        app.get("/", ctx -> ctx.redirect("/index"));
-        app.get("/index", ctx -> ctx.render("index.html"));
-
-        // login routes
-        app.get("/login", ctx -> ctx.render("loginPage.html"));
-        app.get("/register", ctx -> ctx.render("registerPage.html"));
-        app.post("/register", UserController::registerUser);
-        app.post("/login", UserController::loginUser);
-
+        UserController.routes(app);
 
         // order routes
         app.post("/create-order", ctx -> {
