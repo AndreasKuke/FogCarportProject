@@ -33,10 +33,11 @@ public static void OrderCreate(Context ctx) {
         int length = Integer.parseInt(ctx.formParam("carport-length-selection"));
         Date date = new Date(System.currentTimeMillis());
         boolean status = false;
+        int price = 0; // Not final. Den skal tage fat i stykliste prisen.
 
         int userID = currentUser.getUser_ID();
 
-        Order order = new Order(userID, 0, date, width, height, length, status);
+        Order order = new Order(userID, 0, date, width, height, length, status, price);
 
         OrderMapper orderMapper = new OrderMapper(connectionPool);
         orderMapper.insertOrder(order);

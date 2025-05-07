@@ -19,9 +19,10 @@
         </section>
 
     <nav class="navbar">
-        <a href="/index">
+        <a th:href="${session.currentUser != null && session.currentUser.isAdmin()} ? '/adminPage' : '/index'">
             <img src="/images/FogLogo.png" alt="Logo" class="logo">
         </a>
+
         <!-- Need functionability for redirecting to login if not logged in or redirect to account-->
         <a>Bolig og design</a>
         <a>Byggematerialer</a>
@@ -38,7 +39,7 @@
             <input type="text" placeholder="Søg..." class="search-bar-text">
             <button title="Nulstil din søgning" aria-hidden="false" class="reset-search-button"></button>
         </search>
-        <a href="/login">Fog Konto</a>
+        <a th:href="${session.currentUser != null} ? '/profilePage' : '/login'">Fog Konto</a>
         <a href="/checkout">
             <!-- Needs new img -->
             <img src="/images/shoppingcart.png" alt="Basket" class="basket" style="width: 50px; height: 50px;">
@@ -114,8 +115,6 @@
     </form>
 </div>
 </div>
-
-
 
 
 </body>

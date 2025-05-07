@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Fog Carport</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header>
+    <div class="header-div">
+        <section class="topbar">
+            <ul class="topbar-list">
+                <li><span>30 dages returret</span></li>
+                <li><span>Klik og hent inden for 3 timer*</span></li>
+                <li><span>1-3 dages levering*</span></li>
+                <li><span>Lån en trailer gratis</span></li>
+            </ul>
+        </section>
+
+        <nav class="navbar">
+            <a th:href="${session.currentUser != null && session.currentUser.isAdmin()} ? '/adminPage' : '/index'">
+                <img src="/images/FogLogo.png" alt="Logo" class="logo">
+            </a>
+            <a>Bolig og design</a>
+            <a>Byggematerialer</a>
+            <a>El og belysning</a>
+            <a>Have & fritid</a>
+            <a>Værktøj</a>
+            <a>Mærker</a>
+            <a>Tilbud</a>
+            <a>Fog Pro</a>
+            <search class="search-bar">
+                <button title="Søg" class="search-button"></button>
+                <input type="text" placeholder="Søg..." class="search-bar-text">
+                <button title="Nulstil din søgning" class="reset-search-button"></button>
+            </search>
+            <a th:href="${session.currentUser != null} ? '/profilePage' : '/login'">Fog Konto</a>
+            <a href="/checkout">
+                <img src="/images/shoppingcart.png" alt="Kurv" class="basket" style="width: 50px; height: 50px;">
+                <span>Kurv</span>
+            </a>
+            <li style="float:right" th:if="${session.currentUser != null}">
+                <a th:text="${session.currentUser.email}"></a>
+            </li>
+        </nav>
+    </div>
+</header>
+
+<div class="content-wrapper">
+    <div class="container">
+        <h2>Admin Panel – Alle Ordrer</h2>
+        <p th:text="'Velkommen, ' + ${session.currentUser.username} + ' (Admin)'"></p>
+
+        <table style="width:100%; border-collapse: collapse; margin-top: 20px;">
+            <thead>
+            <tr>
+                <th style="text-align:left; padding: 10px; border-bottom: 2px solid #ddd;">Ordre ID</th>
+                <th style="text-align:left; padding: 10px; border-bottom: 2px solid #ddd;">Bruger Email</th>
+                <th style="text-align:left; padding: 10px; border-bottom: 2px solid #ddd;">Dato</th>
+                <th style="text-align:left; padding: 10px; border-bottom: 2px solid #ddd;">Carport mål</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
+                <td th:text="${order.userEmail}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
+                <td th:text="${order.date}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
+                <td th:text="${order.dimensions}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+</body>
+</html>

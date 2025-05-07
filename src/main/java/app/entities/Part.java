@@ -8,13 +8,15 @@ public class Part {
     // String part_description;
     int part_amount;
     int part_length;
+    double price;
 
-    public Part(int part_id, String part_name, String part_unit, int part_amount, int part_length) {
+    public Part(int part_id, String part_name, String part_unit, int part_amount, int part_length, double price) {
         this.part_id = part_id;
         this.part_name = part_name;
         this.part_unit = part_unit;
         this.part_amount = part_amount;
         this.part_length = part_length;
+        this.price = price;
     }
 
     public Part(int part_id){

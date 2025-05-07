@@ -11,6 +11,7 @@ public class Order {
     Date date;
     boolean status;
     int user_ID;
+    int price;
 
     public Order(int order_ID, Date date) {
         this.order_ID = order_ID;
@@ -26,7 +27,7 @@ public class Order {
         this.status = status;
     }
 
-    public Order(int user_ID, int order_ID, Date date, int carport_height, int carport_width, int carport_length, boolean status) {
+    public Order(int user_ID, int order_ID, Date date, int carport_height, int carport_width, int carport_length, boolean status, int price) {
         this.user_ID = user_ID;
         this.order_ID = order_ID;
         this.date = date;
@@ -34,6 +35,7 @@ public class Order {
         this.carport_width = carport_width;
         this.carport_length = carport_length;
         this.status = status;
+        this.price = price;
     }
 
     public Order(int order_ID) {

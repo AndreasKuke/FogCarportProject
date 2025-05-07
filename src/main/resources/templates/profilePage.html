@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Min Profil - Fog Konto</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header>
+    <div class="header-div">
+        <section class="topbar">
+            <ul class="topbar-list">
+                <li><span>30 dages returret</span></li>
+                <li><span>Klik og hent inden for 3 timer*</span></li>
+                <li><span>1-3 dages levering*</span></li>
+                <li><span>Lån en trailer gratis</span></li>
+            </ul>
+        </section>
+
+        <nav class="navbar">
+            <a th:href="${session.currentUser != null && session.currentUser.isAdmin()} ? '/adminPage' : '/index'">
+                <img src="/images/FogLogo.png" alt="Logo" class="logo">
+            </a>
+            <a>Bolig og design</a>
+            <a>Byggematerialer</a>
+            <a>El og belysning</a>
+            <a>Have & fritid</a>
+            <a>Værktøj</a>
+            <a>Mærker</a>
+            <a>Tilbud</a>
+            <a>Fog Pro</a>
+            <a th:href="${session.currentUser != null} ? '/profilePage' : '/login'">Fog Konto</a>
+            <a href="/checkout">
+                <img src="/images/shoppingcart.png" alt="Kurv" class="basket" style="width: 50px; height: 50px;">
+                <span>Kurv</span>
+            </a>
+            <li style="float:right" th:if="${session.currentUser != null}">
+                <a th:text="${session.currentUser.email}"></a>
+            </li>
+        </nav>
+    </div>
+</header>
+
+<div class="content-wrapper">
+    <div class="container">
+        <h2>Velkommen tilbage!</h2>
+        <p th:text="'Email: ' + ${session.currentUser.email}"></p>
+        <p th:text="'Brugernavn: ' + ${session.currentUser.username}"></p>
+
+        <form action="/logout" method="post">
+            <button class="button">Log ud</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
