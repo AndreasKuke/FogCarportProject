@@ -34,36 +34,28 @@ public class UserController {
         String password = ctx.formParam("password");
 
         String hashedFromDB = userMapper.getUserPasswordFromDB(email);
+        User user = null;
 
         if (hashedFromDB != null && PasswordUtil.checkPassword(password, hashedFromDB)) {
             try {
-                User user = userMapper.getUserByEmail(email);
+                user = userMapper.getUserByEmail(email);
                 ctx.sessionAttribute("currentUser", user);
 
-                ctx.redirect("/index");
             } catch (Exception e) {
                 ctx.sessionAttribute("Error", "An error occurred during login.");
                 ctx.render("loginPage.html");
+                return;
             }
+
+            if (user != null && user.isAdmin()) {
+                ctx.redirect("/adminPage");
+            } else {
+                ctx.redirect("/index");
+            }
+
         } else {
             ctx.sessionAttribute("Error", "Invalid username or password.");
             ctx.redirect("/login");
-
-
-                if (user.isAdmin()) {
-                    ctx.redirect("/adminPage");
-                } else {
-                    ctx.redirect("/index");
-                }
-
-            } else {
-                ctx.sessionAttribute("Error", "Invalid username or password.");
-                ctx.redirect("/login");
-            }
-        } catch (Exception e) {
-            ctx.sessionAttribute("Error", e.getMessage());
-            ctx.render("loginPage.html");
-
         }
     }
 
@@ -78,57 +70,53 @@ public class UserController {
         String hashedPassword = PasswordUtil.hashPassword(password);
 
 
-
         User existingUser = userMapper.getUserByEmail(email);
+
         if (existingUser != null) {
             ctx.sessionAttribute("Error", "Username already exists.");
             ctx.redirect("/register");
         } else {
             assert password != null;
+        }
             if (!password.equals(confirmPassword)) {
                 ctx.sessionAttribute("Error", "Passwords do not match.");
                 ctx.redirect("/register");
             } else {
-                userMapper.createUser(email, password, phoneNumber, name);
+                userMapper.createUser(email, hashedPassword, phoneNumber, name);
                 ctx.redirect("/login");
             }
         }
 
-        else {
-            userMapper.createUser(email, hashedPassword, phoneNumber, name);
-
-    }
-
-    public static void logout(Context ctx) {
-        ctx.req().getSession().invalidate();
-        ctx.redirect("/login");
-    }
-
-    public static void profilePage(Context ctx) {
-        User user = ctx.sessionAttribute("currentUser");
-        if (user != null) {
-                ctx.render("profilePage.html");
-        } else {
-
+        public static void logout (Context ctx){
+            ctx.req().getSession().invalidate();
             ctx.redirect("/login");
         }
-    }
 
-    // methods for routes
-    public static void loginPage(Context ctx) {
-        ctx.render("loginPage.html");
-    }
+        public static void profilePage (Context ctx){
+            User user = ctx.sessionAttribute("currentUser");
+            if (user != null) {
+                ctx.render("profilePage.html");
+            } else {
 
-    public static void registerPage(Context ctx) {
-        ctx.render("registerPage.html");
-    }
+                ctx.redirect("/login");
+            }
+        }
 
-    public static void frontPage(Context ctx) {
-        ctx.render("index.html");
-    }
+        // methods for routes
+        public static void loginPage (Context ctx){
+            ctx.render("loginPage.html");
+        }
 
-    public static void adminPage(Context ctx) {
-        ctx.render("adminPage.html");
-    }
+        public static void registerPage (Context ctx){
+            ctx.render("registerPage.html");
+        }
+
+        public static void frontPage (Context ctx){
+            ctx.render("index.html");
+        }
+
+        public static void adminPage (Context ctx){
+            ctx.render("adminPage.html");
+        }
 
 }
