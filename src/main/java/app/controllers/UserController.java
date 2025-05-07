@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.config.PasswordUtil;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.UserMapper;
@@ -16,20 +17,20 @@ public class UserController {
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
-        try {
-            User user = userMapper.getUserByEmail(email);
+        String hashedFromDB = userMapper.getUserPasswordFromDB(email);
 
-            if (user != null && user.getPassword().equals(password)) {
+        if (hashedFromDB != null && PasswordUtil.checkPassword(password, hashedFromDB)) {
+            try {
+                User user = userMapper.getUserByEmail(email);
                 ctx.sessionAttribute("currentUser", user);
                 ctx.redirect("/index");
-
-            } else {
-                ctx.sessionAttribute("Error", "Invalid username or password.");
-                ctx.redirect("/login");
+            } catch (Exception e) {
+                ctx.sessionAttribute("Error", "An error occurred during login.");
+                ctx.render("loginPage.html");
             }
-        }catch ( Exception e ) {
-            ctx.sessionAttribute("Error", e.getMessage());
-            ctx.render("loginPage.html");
+        } else {
+            ctx.sessionAttribute("Error", "Invalid username or password.");
+            ctx.redirect("/login");
         }
     }
 
@@ -39,6 +40,8 @@ public class UserController {
         String confirmPassword = ctx.formParam("confirm-password");
         String phoneNumber = ctx.formParam("phone");
         String name = ctx.formParam("username");
+
+        String hashedPassword = PasswordUtil.hashPassword(password);
 
 
         User existingUser = userMapper.getUserByEmail(email);
@@ -51,7 +54,7 @@ public class UserController {
             ctx.redirect("/register");
         }
         else {
-            userMapper.createUser(email, password, phoneNumber, name);
+            userMapper.createUser(email, hashedPassword, phoneNumber, name);
             ctx.redirect("/login");
         }
     }
