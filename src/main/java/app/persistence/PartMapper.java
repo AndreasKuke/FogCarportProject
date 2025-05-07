@@ -30,7 +30,8 @@ public class PartMapper {
                         rs.getString("part_name"),
                         rs.getString("part_unit"),
                         rs.getInt("part_amount"),
-                        rs.getInt("part_length")
+                        rs.getInt("part_length"),
+                        rs.getDouble("price")
                 );
             }
         } catch (SQLException e) {
