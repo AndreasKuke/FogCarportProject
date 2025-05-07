@@ -7,7 +7,7 @@ public class User {
     String password;
     String email;
     String phoneNumber;
-    boolean role;
+    boolean isAdmin;
 
     public User(int userId) {
         this.userId = userId;
@@ -21,13 +21,13 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public User(int userId, String username, String password, String email, String phoneNumber, boolean role) {
+    public User(int userId, String username, String password, String email, String phoneNumber, boolean isAdmin) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.role = role;
+        this.isAdmin = isAdmin;
     }
 
     public int getUser_ID() {
@@ -70,11 +70,11 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public boolean isRole() {
-        return role;
+    public boolean isAdmin() {
+        return isAdmin;
     }
 
-    public void setRole(boolean role) {
-        this.role = role;
+    public void setAdmin(boolean admin) {
+        this.isAdmin = admin;
     }
 }
