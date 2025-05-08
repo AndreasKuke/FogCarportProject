@@ -34,6 +34,7 @@ public class EmailUtil {
         personalization.addDynamicTemplateData("login", user.getEmail());
         personalization.addDynamicTemplateData("number", user.getPhoneNumber());
 
+        mail.addPersonalization(personalization);
         mail.addCategory("carport");
         mail.setTemplateId(OrderConfirmationID);
 
