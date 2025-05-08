@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.config.EmailUtil;
 import app.entities.Order;
 import app.entities.User;
 import app.persistence.ConnectionPool;
@@ -44,6 +45,9 @@ public static void OrderCreate(Context ctx) {
 
         ctx.attribute("message","Din ordre er nu blevet afsendt og vi vil få en til at kigge på den!");
         ctx.render("orderConfirmationPage.html"); // Bare en idé til en ny HTML side.
+
+        //EmailUtil.SendOrderConfirmation(ctx);
+        //"Af"-kommenteres for at begynde at sende mails af sted ved oprettelse af ordre
     } catch (Exception e) {
         e.printStackTrace();
         ctx.attribute("message","Der er sket en fejl " + e.getMessage());
