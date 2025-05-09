@@ -5,6 +5,7 @@ import app.entities.Order;
 import app.entities.User;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
+import app.services.Calculator;
 import io.javalin.http.Context;
 
 import java.sql.Connection;
@@ -15,6 +16,7 @@ import java.util.Calendar;
 public class OrderController {
 
     private static ConnectionPool connectionPool;
+    private OrderMapper orderMapper;
 
     public OrderController(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
@@ -30,7 +32,6 @@ public static void OrderCreate(Context ctx) {
         }
 
         int width = Integer.parseInt(ctx.formParam("carport-width-selection"));
-        int height = Integer.parseInt(ctx.formParam("carport-height-selection"));
         int length = Integer.parseInt(ctx.formParam("carport-length-selection"));
         Date date = new Date(System.currentTimeMillis());
         boolean status = false;
@@ -38,10 +39,18 @@ public static void OrderCreate(Context ctx) {
 
         int userID = currentUser.getUser_ID();
 
-        Order order = new Order(userID, 0, date, width, height, length, status, price);
+        Order order = new Order(userID, 0, date, width, length, status, price);
 
         OrderMapper orderMapper = new OrderMapper(connectionPool);
         orderMapper.insertOrder(order);
+        int orderID = orderMapper.getNewestOrderID();
+        order.setOrder_ID(orderID);
+
+        // Calculator stuff
+        Calculator calculator = new Calculator(connectionPool);
+        calculator.calcPoles(order);
+        calculator.calcBeams(order);
+        calculator.calcRafters(order);
 
         ctx.attribute("message","Din ordre er nu blevet afsendt og vi vil få en til at kigge på den!");
         ctx.render("orderConfirmationPage.html"); // Bare en idé til en ny HTML side.
