@@ -5,7 +5,6 @@ import java.sql.Date;
 public class Order {
 
     int order_ID;
-    int carport_height;
     int carport_width;
     int carport_length;
     Date date;
@@ -18,20 +17,18 @@ public class Order {
         this.date = date;
     }
 
-    public Order(int order_ID, Date date, int carport_height, int carport_width, int carport_length, boolean status) {
+    public Order(int order_ID, Date date,  int carport_width, int carport_length, boolean status) {
         this.order_ID = order_ID;
         this.date = date;
-        this.carport_height = carport_height;
         this.carport_width = carport_width;
         this.carport_length = carport_length;
         this.status = status;
     }
 
-    public Order(int user_ID, int order_ID, Date date, int carport_height, int carport_width, int carport_length, boolean status, int price) {
+    public Order(int user_ID, int order_ID, Date date, int carport_width, int carport_length, boolean status, int price) {
         this.user_ID = user_ID;
         this.order_ID = order_ID;
         this.date = date;
-        this.carport_height = carport_height;
         this.carport_width = carport_width;
         this.carport_length = carport_length;
         this.status = status;
@@ -48,14 +45,6 @@ public class Order {
 
     public void setOrder_ID(int order_ID) {
         this.order_ID = order_ID;
-    }
-
-    public int getCarport_height() {
-        return carport_height;
-    }
-
-    public void setCarport_height(int carport_height) {
-        this.carport_height = carport_height;
     }
 
     public int getCarport_width() {

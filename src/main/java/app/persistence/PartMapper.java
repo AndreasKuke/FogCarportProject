@@ -39,4 +39,21 @@ public class PartMapper {
         }
         return null;
     }
+
+    public Integer getPartIdByName(String partName) {
+        String sql = "SELECT part_id from parts WHERE part_name = ?";
+
+        try (Connection conn = connectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setString(1, partName);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()){
+                return rs.getInt("part_id");
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

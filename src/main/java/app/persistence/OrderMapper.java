@@ -32,7 +32,6 @@ public class OrderMapper {
                 return new Order(
                         rs.getInt("order_id"),
                         rs.getDate("date"),
-                        rs.getInt("carport_height"),
                         rs.getInt("carport_width"),
                         rs.getInt("carport_length"),
                         rs.getBoolean("status")
@@ -45,18 +44,17 @@ public class OrderMapper {
     }
 
     public void insertOrder(Order order) throws DatabaseException {
-        String sql = "INSERT into orders (carport_height, carport_width, carport_length, date, status, user_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT into orders (carport_width, carport_length, date, status, user_id) " +
+                "VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = connectionPool.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)){
 
-            stmt.setInt(1, order.getCarport_height());
-            stmt.setInt(2, order.getCarport_width());
-            stmt.setInt(3, order.getCarport_length());
-            stmt.setDate(4, order.getDate());
-            stmt.setBoolean(5,order.isStatus());
-            stmt.setInt(6, order.getUser_ID());
+            stmt.setInt(1, order.getCarport_width());
+            stmt.setInt(2, order.getCarport_length());
+            stmt.setDate(3, order.getDate());
+            stmt.setBoolean(4,order.isStatus());
+            stmt.setInt(5, order.getUser_ID());
 
             stmt.executeUpdate();
 
@@ -93,7 +91,6 @@ public class OrderMapper {
                         rs.getInt("user_id"),
                         rs.getInt("order_id"),
                         rs.getDate("date"),
-                        rs.getInt("carport_height"),
                         rs.getInt("carport_width"),
                         rs.getInt("carport_length"),
                         rs.getBoolean("status"),
@@ -107,5 +104,20 @@ public class OrderMapper {
         }
 
         return orders;
+    }
+
+    public int getNewestOrderID() throws DatabaseException {
+        String sql = "SELECT MAX(order_id) FROM orders";
+
+        try (Connection conn = connectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()){
+            if (rs.next()){
+                return rs.getInt(1);
+            }
+            throw new DatabaseException("Could not find any newest order ID");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
