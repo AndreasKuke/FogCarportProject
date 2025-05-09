@@ -23,15 +23,21 @@ public class Calculator {
 
     public void calcPoles(Order order) throws DatabaseException {
         PartsListMapper partsListMapper = new PartsListMapper(connectionPool);
-        int numberOfPoles = 4; // Base pole amount for each corner.
+        int numberOfPoles = 2; // Two base poles at the end.
         int length = order.getCarport_length();
         int maxPoleDistance = 340; // Jon's ord ikke mine.
+        int initialSpacing = 100; // Luftrum mellem indgang og første pæl.
 
-        if (length > maxPoleDistance){
-            int extraPoles = (length + maxPoleDistance - 1) / maxPoleDistance - 1; // Calculates amount of poles, minus base ones
+        int fullLength = length - initialSpacing; // Fjernet 100 cm luftrum fra start.
 
-            numberOfPoles += (extraPoles * 2);
+        if (fullLength > 0){
+            //numberOfPoles += (length - 1) / maxPoleDistance;
+            numberOfPoles = 2 * ((fullLength + maxPoleDistance - 1) / maxPoleDistance + 1);
+        } else {
+            numberOfPoles = 4;
         }
+
+
         Integer polePartId = partMapper.getPartIdByName("97x97 mm. trykimp. Stolpe");
         if (polePartId != null) {
             Integer poleVariantId = partVariantMapper.findVariantByLengthAndPart(300, polePartId);
@@ -71,7 +77,7 @@ public class Calculator {
         int length = order.getCarport_length();
         int width = order.getCarport_width();
         int rafterSpacing = 55;
-        int numberOfRafters = (length + rafterSpacing - 1) / rafterSpacing + 1;
+        int numberOfRafters = (length + rafterSpacing - 1) / rafterSpacing;
         int rafterLength = width;
 
         Integer rafterPartId = partMapper.getPartIdByName("45x195 mm. spærtræ ubh.");
