@@ -57,6 +57,10 @@ public class Calculator {
         int length = order.getCarport_length();
         int numberOfBeams = 2;
 
+        if(length > 600){
+            extraBeams(order, length);
+        }
+
         Integer beamPartId = partMapper.getPartIdByName("45x195 mm. spærtræ ubh.");
         if (beamPartId != null) {
             Integer beamVariantId = partVariantMapper.findVariantByLengthAndPart(length, beamPartId);
@@ -86,6 +90,27 @@ public class Calculator {
             if (rafterVariantId != null) {
                 partsListMapper.insertPartListItem(order.getOrder_ID(), rafterVariantId, numberOfRafters, "Spær monteres på rem");
             } else {
+                throw new DatabaseException("Part variant not found");
+            }
+        }else {
+            throw new DatabaseException("Part not found");
+        }
+    }
+
+    public void extraBeams(Order order, int length) throws DatabaseException {
+        PartsListMapper partsListMapper = new PartsListMapper(connectionPool);
+
+        int restLength = length-600;
+        if(restLength <= 120){
+            restLength = 120;
+        }
+
+        Integer beamPartId = partMapper.getPartIdByName("45x195 mm. spærtræ ubh.");
+        if (beamPartId != null) {
+            Integer beamVariantId = partVariantMapper.findVariantByLengthAndPart(restLength*2, beamPartId);
+            if (beamVariantId != null) {
+                partsListMapper.insertPartListItem(order.getOrder_ID(), beamVariantId, 1, "Remme i sider, sadles ned i stolpen, deles i to");
+            }else {
                 throw new DatabaseException("Part variant not found");
             }
         }else {
