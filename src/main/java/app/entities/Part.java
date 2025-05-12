@@ -8,9 +8,9 @@ public class Part {
     // String part_description;
     int part_amount;
     int part_length;
-    double price;
+    int price;
 
-    public Part(int part_id, String part_name, String part_unit, int part_amount, int part_length, double price) {
+    public Part(int part_id, String part_name, String part_unit, int part_amount, int part_length, int price) {
         this.part_id = part_id;
         this.part_name = part_name;
         this.part_unit = part_unit;
@@ -23,10 +23,11 @@ public class Part {
         this.part_id = part_id;
     }
 
-    public Part(int part_id, String part_name, String part_unit){
+    public Part(int part_id, String part_name, String part_unit, int price){
         this.part_id = part_id;
         this.part_name = part_name;
         this.part_unit = part_unit;
+        this.price = price;
     }
 
     public int getPart_id() {
@@ -67,5 +68,13 @@ public class Part {
 
     public void setPart_length(int part_length) {
         this.part_length = part_length;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 }
