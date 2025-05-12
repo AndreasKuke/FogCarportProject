@@ -84,3 +84,19 @@ ALTER TABLE IF EXISTS public.parts_list
     NOT VALID;
 
 END;
+
+-- Insert data into parts
+INSERT INTO public.parts (part_id, part_name, unit, price) VALUES
+                                                               (1, '97x97 mm. trykimp. Stolpe', 'stk', 42),
+                                                               (2, '45x195 mm. spærtræ ubh.', 'stk', 62);
+
+-- Insert data into part_variant
+INSERT INTO public.part_variant (part_variant_id, length, part_id) VALUES
+                                                                       (1, 300, 1),
+                                                                       (2, 300, 2),
+                                                                       (3, 360, 2),
+                                                                       (4, 420, 2),
+                                                                       (5, 480, 2),
+                                                                       (6, 540, 2),
+                                                                       (7, 600, 2),
+                                                                       (8, 750, 2);
