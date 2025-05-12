@@ -3,6 +3,7 @@ package app;
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
 import app.controllers.OrderController;
+import app.controllers.PriceController;
 import app.controllers.UserController;
 import app.persistence.ConnectionPool;
 import com.sendgrid.Method;
@@ -32,6 +33,7 @@ public class Main {
 
     // Controllers
     private static final OrderController orderController = new OrderController(connectionPool);
+    private static final PriceController priceController = new PriceController(connectionPool);
 
     public static void main(String[] args) {
         Javalin app = Javalin.create(config -> {
@@ -51,6 +53,9 @@ public class Main {
             orderController.OrderCreate(ctx);
 
         });
+
+        // price routes
+        priceController.routes(app);
     }
 
 }
