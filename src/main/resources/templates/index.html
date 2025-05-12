@@ -101,22 +101,16 @@
             </option>
         </select>
 
-        <button type="submit" class="button" formaction="/calculate-price" formmethod="GET">Se vejledende pris</button>
+        <button type="button" id="get-guiding-price" class="button">Se vejledende pris</button>
 
     </div>
     <button class="button">Bestil tilbud</button>
     </form>
 
-    <div th:if="${guidingPrice != null}">
-        <h3>Vejledende pris:</h3>
-        <p th:text="${guidingPrice} + ' kr. ' "></p>
-    </div>
-    <div th:if="${priceError != null}">
-        <p style="color: red;" th:text="${priceError}"></p>
-    </div>
+
 </div>
 </div>
 
-
+<script src="/js/index.js"></script>
 </body>
 </html>
