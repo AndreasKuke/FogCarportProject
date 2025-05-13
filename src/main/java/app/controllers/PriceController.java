@@ -4,6 +4,7 @@ import app.entities.Order;
 import app.entities.Part;
 import app.persistence.ConnectionPool;
 import app.persistence.PartMapper;
+import app.persistence.PartVariantMapper;
 import app.services.Calculator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -12,6 +13,7 @@ public class PriceController {
 
     private Calculator calculator;
     private PartMapper partMapper;
+    private PartVariantMapper partVariantMapper;
 
     public PriceController(ConnectionPool connectionPool) {
         this.calculator = new Calculator(connectionPool);
@@ -39,7 +41,7 @@ public class PriceController {
             int beamPrice = getPriceByName("45x195 mm. spærtræ ubh.");
             int rafterPrice = getPriceByName("45x195 mm. spærtræ ubh.");
 
-            int totalPrice = (poles * polePrice) + (beams * beamPrice) + (rafters * rafterPrice);
+            int totalPrice = (poles * polePrice) + (beams * (beamPrice * length)) + (rafters * (rafterPrice * width));
 
             ctx.json(totalPrice);
         }catch (Exception e) {
@@ -55,7 +57,7 @@ public class PriceController {
         int fullLength = length - initialSpacing;
 
         if (fullLength > 0) {
-            numberOfPoles = 2 * ((fullLength * maxPoleDistance - 1) / maxPoleDistance + 1);
+            numberOfPoles = 2 * ((fullLength + maxPoleDistance - 1) / maxPoleDistance + 1);
         }
         if (numberOfPoles < 4 ) {
             numberOfPoles = 4;
@@ -64,7 +66,7 @@ public class PriceController {
     }
 
     private int calcBeamsQuantity(Order order) {
-        return 2; // Initial start, not actual. Could be 4 poles etc.
+        return 4; // Initial start, not actual. Could be 4 poles etc.
     }
 
     private int calcRaftersQuantity(Order order) {
@@ -81,4 +83,5 @@ public class PriceController {
         }
         throw new RuntimeException("Price not found for: " + partName);
     }
+
 }
