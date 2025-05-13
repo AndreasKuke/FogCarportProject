@@ -2,6 +2,8 @@ package app;
 
 import app.entities.Order;
 
+import java.util.Locale;
+
 public class Svg {
     private StringBuilder svg;
 //    private final String viewBox;
@@ -15,19 +17,19 @@ public class Svg {
     }
 
     public void addRect(int x, int y,double height, double width, String stroke, String fill){
-        svg.append(String.format("<rect x='%d' y='%d' height='%d' width='%d' stroke='%s' fill='%s'",
+        svg.append(String.format(Locale.US,"<rect x='%d' y='%d' height='%1f' width='%1f' stroke='%s' fill='%s' />\n",
                 x, y, height, width, stroke, fill));
     }
 
     public void addLine(int x1, int y1, int x2, int y2, String style){
-        svg.append(String.format("<rect x1='%d' y1='%d' x2='%d' y2='%d' style='%s'",
+        svg.append(String.format(Locale.US,"<rect x1='%d' y1='%d' x2='%d' y2='%d' style='%s' />\n",
                 x1, y1, x2, y2, style));
     }
 
     public String buildSvg(){
         //Builds the .svg file by setting up the <svg> element and using svg.toString() to add the rect/line elements added to the StringBuilder
-        return String.format("<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-                "width='%s' height='%s' viewBox=\"0 0 800 600\">\n%s</svg>",width, height, svg.toString());
+        return String.format(Locale.US,"<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+                "width='%1f' height='%1f' viewBox=\"0 0 800 600\">\n%s</svg>",width, height, svg.toString());
     }
 
     public void appendFromOrder(Order order){
@@ -56,7 +58,7 @@ public class Svg {
         //height = 45 because 4,5 cm is the standard width of the beams
         double rafterWidth = 4.5;
         for(int i = 0; i < rafterAmount; i++){
-            int x = 0;
+            int x = i * rafterSpacing;
             addRect(x,0, carportWidth, rafterWidth, "#000000", "#ffffff");
         }
     }
@@ -65,21 +67,20 @@ public class Svg {
         int numberOfPoles = 4;
         int length = (int)carportLength;
         int maxPoleDistance = 340;
-        int initialSpacing = 100;
-        int fullLength = length - initialSpacing;
+        int initialSpacing = 107;
+        int fullLength = length - (int)initialSpacing;
 
         if (fullLength > 0) {
-            numberOfPoles = 2 * ((fullLength * maxPoleDistance - 1) / maxPoleDistance + 1);
+            numberOfPoles = 2 * ((fullLength + maxPoleDistance - 1) / maxPoleDistance + 1);
         }
         if (numberOfPoles < 4 ) {
             numberOfPoles = 4;
         }
 
-        for(int i = 0; i < numberOfPoles / 2; i++){
-            int x = 100;
-            addRect(x, 32, 9.7, 9.7, "#000000", "#ffffff");
-            addRect(x, 562, 9.7, 9.7, "#000000", "#ffffff");
-            x =+ 340;
+        for(int i = 0; i <= numberOfPoles / 2; i++){
+            addRect(initialSpacing, 32, 9.7, 9.7, "#000000", "#ffffff");
+            addRect(initialSpacing, 562, 9.7, 9.7, "#000000", "#ffffff");
+            initialSpacing += maxPoleDistance-10;
         }
     }
 }

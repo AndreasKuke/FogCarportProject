@@ -5,6 +5,7 @@ import app.config.ThymeleafConfig;
 import app.controllers.OrderController;
 import app.controllers.PriceController;
 import app.controllers.UserController;
+import app.entities.Order;
 import app.persistence.ConnectionPool;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
@@ -16,6 +17,7 @@ import com.sendgrid.helpers.mail.objects.Personalization;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -56,6 +58,19 @@ public class Main {
 
         // price routes
         priceController.routes(app);
+
+//        Svg svg = new Svg();
+//        Order order = new Order(0, 0, null, 600, 780, false, 0);
+//
+//        svg.appendFromOrder(order);
+//        String svgOutput = svg.buildSvg();
+//
+//        try (FileWriter writer = new FileWriter("carport.svg")) {
+//            writer.write(svgOutput);
+//            System.out.println("SVG saved to carport.svg");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
 }

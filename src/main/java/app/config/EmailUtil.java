@@ -1,5 +1,7 @@
 package app.config;
 
+import app.Svg;
+import app.entities.Order;
 import app.entities.User;
 import app.persistence.ConnectionPool;
 import com.sendgrid.Method;
@@ -7,6 +9,7 @@ import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Attachments;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 import io.javalin.http.Context;
@@ -53,5 +56,31 @@ public class EmailUtil {
             System.out.println("Error sending mail");
             e.printStackTrace();
         }
+    }
+
+    public static void sendPaymentConfirmation(Context ctx, Order order){
+        User user = ctx.sessionAttribute("currentUser");
+        Mail mail = new Mail();
+        mail.setFrom(from);
+
+        Personalization personalization = new Personalization();
+
+        personalization.addTo(new Email(user.getEmail(), user.getUsername()));
+        personalization.addDynamicTemplateData("name", user.getUsername());
+        personalization.addDynamicTemplateData("login", user.getEmail());
+        personalization.addDynamicTemplateData("number", user.getPhoneNumber());
+
+        mail.addPersonalization(personalization);
+        mail.addCategory("carport");
+        mail.setTemplateId(PaymentConfirmationID);
+
+        Svg svg = new Svg();
+        svg.appendFromOrder(order);
+        String svgContent = svg.buildSvg();
+
+        String
+
+        Attachments attachment = new Attachments();
+
     }
 }
