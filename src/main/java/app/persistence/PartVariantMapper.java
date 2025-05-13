@@ -33,4 +33,20 @@ public class PartVariantMapper {
         }
     }
 
+    public Integer findLengthByVariantId(int variant_id) throws DatabaseException {
+        String sql = "SELECT length from part_variant WHERE part_variant_id = ?";
+
+        try (Connection conn = connectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setInt(1,variant_id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()){
+                return rs.getInt("length");
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
