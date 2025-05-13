@@ -55,7 +55,7 @@ public class PriceController {
         int fullLength = length - initialSpacing;
 
         if (fullLength > 0) {
-            numberOfPoles = 2 * ((fullLength * maxPoleDistance - 1) / maxPoleDistance + 1);
+            numberOfPoles = 2 * ((fullLength + maxPoleDistance - 1) / maxPoleDistance + 1);
         }
         if (numberOfPoles < 4 ) {
             numberOfPoles = 4;
