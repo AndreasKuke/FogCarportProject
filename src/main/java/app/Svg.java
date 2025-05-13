@@ -34,7 +34,7 @@ public class Svg {
         addFrame(order.getCarport_width(), order.getCarport_length());
         addBeams(order.getCarport_length());
         addRafters(order.getCarport_width(), order.getCarport_length());
-        //addPosts(order.getCarport_length);
+        addPosts(order.getCarport_length());
     }
 
     public void addFrame(double carportWidth, double carportLength){
@@ -62,8 +62,24 @@ public class Svg {
     }
 
     public void addPosts(double carportLength){
-        carportLength =+ 100;
-        int numberOfPoles = 2 * (((int)carportLength + 340 - 1) / 340 + 1);
+        int numberOfPoles = 4;
+        int length = (int)carportLength;
+        int maxPoleDistance = 340;
+        int initialSpacing = 100;
+        int fullLength = length - initialSpacing;
 
+        if (fullLength > 0) {
+            numberOfPoles = 2 * ((fullLength * maxPoleDistance - 1) / maxPoleDistance + 1);
+        }
+        if (numberOfPoles < 4 ) {
+            numberOfPoles = 4;
+        }
+
+        for(int i = 0; i < numberOfPoles / 2; i++){
+            int x = 100;
+            addRect(x, 32, 9.7, 9.7, "#000000", "#ffffff");
+            addRect(x, 562, 9.7, 9.7, "#000000", "#ffffff");
+            x =+ 340;
+        }
     }
 }
