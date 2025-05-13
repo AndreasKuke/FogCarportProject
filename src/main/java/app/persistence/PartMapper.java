@@ -31,7 +31,7 @@ public class PartMapper {
                         rs.getString("part_unit"),
                         rs.getInt("part_amount"),
                         rs.getInt("part_length"),
-                        rs.getDouble("price")
+                        rs.getInt("price")
                 );
             }
         } catch (SQLException e) {
@@ -52,6 +52,28 @@ public class PartMapper {
                 return rs.getInt("part_id");
             }
             return null;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Part getPartByName(String partName) {
+        String sql = "SELECT part_id, part_name, unit, price FROM parts WHERE part_name = ?";
+
+        try (Connection conn = connectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setString(1,partName);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()){
+                return new Part(
+                        rs.getInt("part_id"),
+                        rs.getString("part_name"),
+                        rs.getString("unit"),
+                        rs.getInt("price")
+                );
+            }return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
