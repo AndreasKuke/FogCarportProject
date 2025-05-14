@@ -55,7 +55,6 @@ public class Svg {
     public void addRafters(double carportWidth, double carportLength){
         int rafterAmount = (int)carportLength/55 + 1;
         int rafterSpacing = 55;
-        //height = 45 because 4,5 cm is the standard width of the beams
         double rafterWidth = 4.5;
         for(int i = 0; i < rafterAmount; i++){
             int x = i * rafterSpacing;

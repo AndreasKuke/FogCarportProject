@@ -15,6 +15,8 @@ import com.sendgrid.helpers.mail.objects.Personalization;
 import io.javalin.http.Context;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 public class EmailUtil {
 
@@ -78,9 +80,16 @@ public class EmailUtil {
         svg.appendFromOrder(order);
         String svgContent = svg.buildSvg();
 
-        String
+        //Gets the .svg file as bytes using UTF_8-encoding, then uses Java's Base64 encoder to encode the bytes to Base64
+        String encodedSvg = Base64.getEncoder().encodeToString(svgContent.getBytes(StandardCharsets.UTF_8));
 
         Attachments attachment = new Attachments();
-
+        attachment.setContent(encodedSvg);
+        //"image/svg+xml" is not just a name. It tells the browser/email client etc what kind of file it is.
+        attachment.setType("image/svg+xml");
+        attachment.setFilename("carport.svg");
+        //"attachment" tells SendGrid that it is an attachment, not to be displayed inline in the e-mail.
+        attachment.setDisposition("attachment");
+        attachment.setContentId("carportDrawing");
     }
 }
