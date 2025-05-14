@@ -61,7 +61,7 @@ public class PriceController {
             Calculator calculator = new Calculator(connectionPool);
 
 
-            int totalPrice = calculator.calcPrice(tempOrder);
+            double totalPrice = calculator.calcPrice(tempOrder);
 
             ctx.json(totalPrice);
         }catch (Exception e) {

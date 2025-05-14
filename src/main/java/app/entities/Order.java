@@ -86,4 +86,12 @@ public class Order {
     public void setUser_ID(int user_ID) {
         this.user_ID = user_ID;
     }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
 }

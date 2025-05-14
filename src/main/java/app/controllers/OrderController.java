@@ -17,7 +17,8 @@ import java.util.Calendar;
 public class OrderController {
 
     private static ConnectionPool connectionPool;
-    private OrderMapper orderMapper;
+    private static OrderMapper orderMapper;
+    private static Calculator calculator;
 
     public OrderController(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
@@ -36,11 +37,11 @@ public static void OrderCreate(Context ctx) {
         int length = Integer.parseInt(ctx.formParam("carport-length-selection"));
         Date date = new Date(System.currentTimeMillis());
         boolean status = false;
-        int price = 0; // Not final. Den skal tage fat i stykliste prisen.
+        int price; // Not final. Den skal tage fat i stykliste prisen.
 
         int userID = currentUser.getUser_ID();
 
-        Order order = new Order(userID, 0, date, width, length, status, price);
+        Order order = new Order(userID, 0, date, width, length, status, 0);
 
         //Creates an .svg file from the order and adds it to the session to be displayed
         SvgUtil svg = new SvgUtil();
@@ -49,6 +50,8 @@ public static void OrderCreate(Context ctx) {
         ctx.attribute("svg", svgContent);
 
         OrderMapper orderMapper = new OrderMapper(connectionPool);
+
+
         orderMapper.insertOrder(order);
         int orderID = orderMapper.getNewestOrderID();
         order.setOrder_ID(orderID);
@@ -58,6 +61,11 @@ public static void OrderCreate(Context ctx) {
         calculator.calcPoles(order);
         calculator.calcBeams(order);
         calculator.calcRafters(order);
+
+        price = calculator.calcPrice(order);
+        order.setPrice(price);
+
+        orderMapper.updateOrderPrice(order);
 
         ctx.attribute("message","Din ordre er nu blevet afsendt og vi vil få en til at kigge på den!");
         ctx.render("orderConfirmationPage.html"); // Bare en idé til en ny HTML side.
@@ -71,4 +79,6 @@ public static void OrderCreate(Context ctx) {
     }
 
     }
+
+
 }
