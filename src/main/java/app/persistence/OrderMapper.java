@@ -1,6 +1,7 @@
 package app.persistence;
 
 import app.entities.Order;
+import app.entities.User;
 import app.exceptions.DatabaseException;
 
 import java.sql.Connection;
@@ -14,6 +15,7 @@ import java.sql.Date;
 public class OrderMapper {
 
     private final ConnectionPool connectionPool;
+    private UserMapper userMapper;
 
     public  OrderMapper(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
@@ -44,8 +46,8 @@ public class OrderMapper {
     }
 
     public void insertOrder(Order order) throws DatabaseException {
-        String sql = "INSERT into orders (carport_width, carport_length, date, status, user_id) " +
-                "VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT into orders (carport_width, carport_length, date, status, user_id, price) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = connectionPool.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -55,6 +57,7 @@ public class OrderMapper {
             stmt.setDate(3, order.getDate());
             stmt.setBoolean(4,order.isStatus());
             stmt.setInt(5, order.getUser_ID());
+            stmt.setInt(6, order.getPrice());
 
             stmt.executeUpdate();
 
@@ -63,12 +66,13 @@ public class OrderMapper {
         }
     }
 
-    public void updateOrder(Order order) throws DatabaseException {
-        String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
+    public void updateOrderPrice(Order order) throws DatabaseException {
+        String sql = "UPDATE orders SET price = ? WHERE order_id = ?";
 
         try (Connection conn = connectionPool.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)){
-
+            stmt.setInt(1, order.getPrice());
+            stmt.setInt(2, order.getOrder_ID());
             stmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -87,15 +91,16 @@ public class OrderMapper {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Order order = new Order(
-                        rs.getInt("user_id"),
-                        rs.getInt("order_id"),
-                        rs.getDate("date"),
-                        rs.getInt("carport_width"),
-                        rs.getInt("carport_length"),
-                        rs.getBoolean("status"),
-                        rs.getInt("price"));
+                        int user_id = rs.getInt("user_id");
+                        int order_id = rs.getInt("order_id");
+                        Date date = rs.getDate("date");
+                        int width = rs.getInt("carport_width");
+                        int length = rs.getInt("carport_length");
+                        boolean status = rs.getBoolean("status");
+                        int price = rs.getInt("price");
 
+                String userEmail = userMapper.getUserEmailByID(user_id);
+                Order order = new Order(user_id,order_id,date,width,length,status,price);
                 orders.add(order);
             }
 
