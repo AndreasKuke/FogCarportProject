@@ -1,9 +1,7 @@
 package app.config;
 
-import app.Svg;
 import app.entities.Order;
 import app.entities.User;
-import app.persistence.ConnectionPool;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
@@ -101,7 +99,7 @@ public class EmailUtil {
 
 
     public static Attachments createSvgAttachment(Order order){
-        Svg svg = new Svg();
+        SvgUtil svg = new SvgUtil();
         svg.appendFromOrder(order);
         String svgContent = svg.buildSvg();
 

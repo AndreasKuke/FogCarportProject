@@ -1,10 +1,10 @@
-package app;
+package app.config;
 
 import app.entities.Order;
 
 import java.util.Locale;
 
-public class Svg {
+public class SvgUtil {
     private StringBuilder svg;
 //    private final String viewBox;
     private final double width = 780;
@@ -12,7 +12,7 @@ public class Svg {
     private final int x = 0;
     private final int y = 0;
 
-    public Svg (){
+    public SvgUtil(){
         this.svg = new StringBuilder();
     }
 
