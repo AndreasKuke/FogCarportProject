@@ -7,6 +7,7 @@ import app.entities.User;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import app.services.Calculator;
+import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import java.sql.Connection;
@@ -41,7 +42,7 @@ public static void OrderCreate(Context ctx) {
 
         int userID = currentUser.getUser_ID();
 
-        Order order = new Order(userID, 0, date, width, length, status, 0);
+        Order order = new Order(0, userID, width, length, date, 0, status);
 
         //Creates an .svg file from the order and adds it to the session to be displayed
         SvgUtil svg = new SvgUtil();

@@ -18,7 +18,9 @@ public class OrderMapper {
     private UserMapper userMapper;
 
     public  OrderMapper(ConnectionPool connectionPool) {
+
         this.connectionPool = connectionPool;
+        this.userMapper = new UserMapper(connectionPool);
     }
 
     public Order getOrder(int id) throws DatabaseException , SQLException {
@@ -100,7 +102,8 @@ public class OrderMapper {
                         int price = rs.getInt("price");
 
                 String userEmail = userMapper.getUserEmailByID(user_id);
-                Order order = new Order(user_id,order_id,date,width,length,status,price);
+                Order order = new Order(order_id, user_id, width,length, date, price, status);
+                order.setUserMail(userEmail);
                 orders.add(order);
             }
 
