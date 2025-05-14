@@ -58,16 +58,22 @@
             <tr>
                 <th style="text-align:left; padding: 10px; border-bottom: 2px solid #ddd;">Ordre ID</th>
                 <th style="text-align:left; padding: 10px; border-bottom: 2px solid #ddd;">Bruger Email</th>
-                <th style="text-align:left; padding: 10px; border-bottom: 2px solid #ddd;">Dato</th>
-                <th style="text-align:left; padding: 10px; border-bottom: 2px solid #ddd;">Carport mål</th>
+                <th style="text-align:left; padding: 10px; border-bottom: 2px solid #ddd;">Carport bredde</th>
+                <th style="text-align:left; padding: 10px; border-bottom: 2px solid #ddd;">Carport længde</th>
+                <th style="text-align:left; padding: 10px; border-bottom: 2px solid #ddd;">Bestillingsdato</th>
+                <th style="text-align:left; padding: 10px; border-bottom: 2px solid #ddd;">Pris kr.</th>
+                <th style="text-align:left; padding: 10px; border-bottom: 2px solid #ddd;">Status</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="order : ${orders}">
-                <td th:text="${order.id}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
-                <td th:text="${order.userEmail}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
+                <td th:text="${order.order_ID}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
+                <td th:text="${order.userMail}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
+                <td th:text="${order.carport_width}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
+                <td th:text="${order.carport_length}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
                 <td th:text="${order.date}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
-                <td th:text="${order.dimensions}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
+                <td th:text="${order.price}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
+                <td th:text="${order.status}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
             </tr>
             </tbody>
         </table>

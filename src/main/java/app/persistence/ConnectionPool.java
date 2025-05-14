@@ -106,6 +106,7 @@ public class ConnectionPool {
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("TimeZone", "Europe/Copenhagen");
 
         return new HikariDataSource(config);
     }
