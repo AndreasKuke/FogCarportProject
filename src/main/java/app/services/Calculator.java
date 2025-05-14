@@ -7,6 +7,7 @@ import app.persistence.ConnectionPool;
 import app.persistence.PartMapper;
 import app.persistence.PartVariantMapper;
 import app.persistence.PartsListMapper;
+import io.javalin.http.Context;
 
 public class Calculator {
 
@@ -117,4 +118,61 @@ public class Calculator {
             throw new DatabaseException("Part not found");
         }
     }
+
+    // Count number of poles, beams and rafters methods since the previous methods dont return anything
+    private int countPoles(Order order) {
+        int numberOfPoles = 2; // Two base poles at the end
+        int length = order.getCarport_length();
+        int maxPoleDistance = 340;
+        int initialSpacing = 100;
+
+        int fullLength = length - initialSpacing;
+
+        if (fullLength > 0) {
+            numberOfPoles = 2 * ((fullLength + maxPoleDistance - 1) / maxPoleDistance + 1);
+        } else {
+            numberOfPoles = 4;
+        }
+
+        return numberOfPoles;
+    }
+
+    private int countBeams(Order order) {
+        int numberOfBeams = 2; // Standard is 2 beams
+        int length = order.getCarport_length();
+
+        if (length > 600) {
+            numberOfBeams += 1;
+        }
+
+        return numberOfBeams;
+    }
+
+    private int countRafters(Order order) {
+        int length = order.getCarport_length();
+        int rafterSpacing = 55;
+
+        return (length + rafterSpacing - 1) / rafterSpacing;
+    }
+
+
+    public int calcPrice(Order order) throws DatabaseException {
+        int length = order.getCarport_length();
+        int width = order.getCarport_width();
+
+        int numberOfPoles = countPoles(order);
+        int numberOfBeams = countBeams(order);
+        int numberOfRafters = countRafters(order);
+
+        int poleUnitPrice = partMapper.getPartByName("97x97 mm. trykimp. Stolpe").getPrice();
+        int beamUnitPricePerMeter = partMapper.getPartByName("45x195 mm. spærtræ ubh.").getPrice();
+        int rafterUnitPricePerMeter = beamUnitPricePerMeter;
+
+        int totalPolePrice = numberOfPoles * poleUnitPrice * 3; // each pole is 3 meters
+        int totalBeamPrice = numberOfBeams * (length / 100) * beamUnitPricePerMeter;
+        int totalRafterPrice = numberOfRafters * (width / 100) * rafterUnitPricePerMeter;
+
+        return totalPolePrice + totalBeamPrice + totalRafterPrice;
+    }
+
 }

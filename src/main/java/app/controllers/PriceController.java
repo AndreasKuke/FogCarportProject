@@ -14,16 +14,42 @@ public class PriceController {
     private Calculator calculator;
     private PartMapper partMapper;
     private PartVariantMapper partVariantMapper;
+    private final ConnectionPool connectionPool;
 
     public PriceController(ConnectionPool connectionPool) {
         this.calculator = new Calculator(connectionPool);
         this.partMapper = new PartMapper(connectionPool);
+        this.connectionPool = connectionPool;
     }
 
     public void routes(Javalin app) {
         app.get("/calculate-price", ctx -> calculatePrice(ctx));
     }
 
+//    private void calculatePrice(Context ctx) {
+//        try {
+//            int length = Integer.parseInt(ctx.queryParam("carport-length-selection"));
+//            int width = Integer.parseInt(ctx.queryParam("carport-width-selection"));
+//
+//            // Simulated order that currentUser will be using to see guiding price
+//            Order tempOrder = new Order(0, 0, null, width, length, false, 0);
+//
+//            int poles = calcPolesQuantity(tempOrder);
+//            int beams = calcBeamsQuantity(tempOrder);
+//            int rafters = calcRaftersQuantity(tempOrder);
+//
+//            // Get prices from our database
+//            int polePrice = getPriceByName("97x97 mm. trykimp. Stolpe") * 3; // pole * 3 meters
+//            int beamPrice = getPriceByName("45x195 mm. spærtræ ubh.") * length/100;
+//            int rafterPrice = getPriceByName("45x195 mm. spærtræ ubh.") * width/100;
+//
+//            int totalPrice = poles * polePrice + beams * beamPrice + rafters * rafterPrice;
+//
+//            ctx.json(totalPrice);
+//        }catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
     private void calculatePrice(Context ctx) {
         try {
             int length = Integer.parseInt(ctx.queryParam("carport-length-selection"));
@@ -32,16 +58,10 @@ public class PriceController {
             // Simulated order that currentUser will be using to see guiding price
             Order tempOrder = new Order(0, 0, null, width, length, false, 0);
 
-            int poles = calcPolesQuantity(tempOrder);
-            int beams = calcBeamsQuantity(tempOrder);
-            int rafters = calcRaftersQuantity(tempOrder);
+            Calculator calculator = new Calculator(connectionPool);
 
-            // Get prices from our database
-            int polePrice = getPriceByName("97x97 mm. trykimp. Stolpe");
-            int beamPrice = getPriceByName("45x195 mm. spærtræ ubh.");
-            int rafterPrice = getPriceByName("45x195 mm. spærtræ ubh.");
 
-            int totalPrice = (poles * polePrice) + (beams * (beamPrice * length)) + (rafters * (rafterPrice * width));
+            int totalPrice = calculator.calcPrice(tempOrder);
 
             ctx.json(totalPrice);
         }catch (Exception e) {
@@ -66,7 +86,7 @@ public class PriceController {
     }
 
     private int calcBeamsQuantity(Order order) {
-        return 4; // Initial start, not actual. Could be 4 poles etc.
+        return 2; // Initial start, not actual. Could be 4 poles etc.
     }
 
     private int calcRaftersQuantity(Order order) {

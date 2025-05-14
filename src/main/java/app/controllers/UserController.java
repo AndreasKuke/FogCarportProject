@@ -1,7 +1,5 @@
 package app.controllers;
 
-import app.config.PasswordUtil;
-import app.exceptions.DatabaseException;
 import app.entities.User;
 import app.persistence.ConnectionPool;
 import app.persistence.UserMapper;
@@ -33,29 +31,25 @@ public class UserController {
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
-        String hashedFromDB = userMapper.getUserPasswordFromDB(email);
-        User user = null;
+        try {
+            User user = userMapper.getUserByEmail(email);
 
-        if (hashedFromDB != null && PasswordUtil.checkPassword(password, hashedFromDB)) {
-            try {
-                user = userMapper.getUserByEmail(email);
+            if (user != null && user.getPassword().equals(password)) {
                 ctx.sessionAttribute("currentUser", user);
 
-            } catch (Exception e) {
-                ctx.sessionAttribute("Error", "An error occurred during login.");
-                ctx.render("loginPage.html");
-                return;
-            }
+                if (user.isAdmin()) {
+                    ctx.redirect("/adminPage");
+                } else {
+                    ctx.redirect("/index");
+                }
 
-            if (user != null && user.isAdmin()) {
-                ctx.redirect("/adminPage");
             } else {
-                ctx.redirect("/index");
+                ctx.sessionAttribute("Error", "Invalid username or password.");
+                ctx.redirect("/login");
             }
-
-        } else {
-            ctx.sessionAttribute("Error", "Invalid username or password.");
-            ctx.redirect("/login");
+        } catch (Exception e) {
+            ctx.sessionAttribute("Error", e.getMessage());
+            ctx.render("loginPage.html");
         }
     }
 
@@ -66,57 +60,57 @@ public class UserController {
         String phoneNumber = ctx.formParam("phone");
         String name = ctx.formParam("username");
 
-
-        String hashedPassword = PasswordUtil.hashPassword(password);
-
-
         User existingUser = userMapper.getUserByEmail(email);
-
         if (existingUser != null) {
             ctx.sessionAttribute("Error", "Username already exists.");
             ctx.redirect("/register");
         } else {
             assert password != null;
-        }
             if (!password.equals(confirmPassword)) {
                 ctx.sessionAttribute("Error", "Passwords do not match.");
                 ctx.redirect("/register");
             } else {
-                userMapper.createUser(email, hashedPassword, phoneNumber, name);
+                userMapper.createUser(email, password, phoneNumber, name);
                 ctx.redirect("/login");
             }
         }
+    }
 
-        public static void logout (Context ctx){
-            ctx.req().getSession().invalidate();
+    public static void logout(Context ctx) {
+        ctx.req().getSession().invalidate();
+        ctx.redirect("/login");
+    }
+
+    public static void profilePage(Context ctx) {
+        User user = ctx.sessionAttribute("currentUser");
+        if (user != null) {
+                ctx.render("profilePage.html");
+        } else {
             ctx.redirect("/login");
         }
+    }
 
-        public static void profilePage (Context ctx){
-            User user = ctx.sessionAttribute("currentUser");
-            if (user != null) {
-                ctx.render("profilePage.html");
-            } else {
+    // methods for routes
+    public static void loginPage(Context ctx) {
+        ctx.render("loginPage.html");
+    }
 
-                ctx.redirect("/login");
-            }
-        }
+    public static void registerPage(Context ctx) {
+        ctx.render("registerPage.html");
+    }
 
-        // methods for routes
-        public static void loginPage (Context ctx){
-            ctx.render("loginPage.html");
-        }
+    public static void frontPage(Context ctx) {
+        ctx.render("index.html");
+    }
 
-        public static void registerPage (Context ctx){
-            ctx.render("registerPage.html");
-        }
-
-        public static void frontPage (Context ctx){
-            ctx.render("index.html");
-        }
-
-        public static void adminPage (Context ctx){
+    public static void adminPage(Context ctx) {
+        User user = ctx.sessionAttribute("currentUser");
+        if (user != null && user.isAdmin()) {
+            //OrderController.showOrders(ctx);
             ctx.render("adminPage.html");
+        } else {
+            ctx.redirect("/login");
         }
+    }
 
 }
