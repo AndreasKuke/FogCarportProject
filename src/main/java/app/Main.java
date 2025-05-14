@@ -58,19 +58,6 @@ public class Main {
 
         // price routes
         priceController.routes(app);
-
-//        Svg svg = new Svg();
-//        Order order = new Order(0, 0, null, 600, 780, false, 0);
-//
-//        svg.appendFromOrder(order);
-//        String svgOutput = svg.buildSvg();
-//
-//        try (FileWriter writer = new FileWriter("carport.svg")) {
-//            writer.write(svgOutput);
-//            System.out.println("SVG saved to carport.svg");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
 }

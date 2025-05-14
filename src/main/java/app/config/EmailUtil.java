@@ -27,7 +27,7 @@ public class EmailUtil {
     private static final String FinalConfirmationID = null;
     private static final String PaymentConfirmationID = null;
 
-    public static void SendOrderConfirmation(Context ctx) {
+    public static void SendOrderConfirmation(Context ctx, Order order) {
         User user = ctx.sessionAttribute("currentUser");
         Mail mail = new Mail();
         mail.setFrom(from);
@@ -39,7 +39,10 @@ public class EmailUtil {
         personalization.addDynamicTemplateData("login", user.getEmail());
         personalization.addDynamicTemplateData("number", user.getPhoneNumber());
 
+        Attachments attachment = createSvgAttachment(order);
+
         mail.addPersonalization(personalization);
+        mail.addAttachments(attachment);
         mail.addCategory("carport");
         mail.setTemplateId(OrderConfirmationID);
 
@@ -72,10 +75,32 @@ public class EmailUtil {
         personalization.addDynamicTemplateData("login", user.getEmail());
         personalization.addDynamicTemplateData("number", user.getPhoneNumber());
 
+        Attachments attachment = createSvgAttachment(order);
+
         mail.addPersonalization(personalization);
+        mail.addAttachments(attachment);
         mail.addCategory("carport");
         mail.setTemplateId(PaymentConfirmationID);
 
+        Request request = new Request();
+
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+
+            Response response = sg.api(request);
+            System.out.println(response.getStatusCode());
+            System.out.println(response.getBody());
+            System.out.println(response.getHeaders());
+        } catch (IOException e) {
+            System.out.println("Error sending mail");
+            e.printStackTrace();
+        }
+    }
+
+
+    public static Attachments createSvgAttachment(Order order){
         Svg svg = new Svg();
         svg.appendFromOrder(order);
         String svgContent = svg.buildSvg();
@@ -91,5 +116,7 @@ public class EmailUtil {
         //"attachment" tells SendGrid that it is an attachment, not to be displayed inline in the e-mail.
         attachment.setDisposition("attachment");
         attachment.setContentId("carportDrawing");
+
+        return attachment;
     }
 }
