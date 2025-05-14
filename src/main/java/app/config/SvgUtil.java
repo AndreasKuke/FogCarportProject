@@ -34,9 +34,9 @@ public class SvgUtil {
 
     public void appendFromOrder(Order order){
         addFrame(order.getCarport_width(), order.getCarport_length());
-        addBeams(order.getCarport_length());
+        addBeams(order.getCarport_length(), order.getCarport_width());
         addRafters(order.getCarport_width(), order.getCarport_length());
-        addPosts(order.getCarport_length());
+        addPoles(order.getCarport_length(), order.getCarport_width());
     }
 
     public void addFrame(double carportWidth, double carportLength){
@@ -44,12 +44,13 @@ public class SvgUtil {
         addRect(0, 0, carportWidth, carportLength, "#000000", "#ffffff");
     }
 
-    public void addBeams(double carportLength){
+    public void addBeams(double carportLength, double carportWidth){
         //height = 45 because 4,5 cm is the standard width of the beams
         double height = 4.5;
-        //adds top beam 35 cm in from the top
+        int y = (int)carportWidth-35;
+        //adds top beam 35 cm in from the top and 35 cm in from the bottom
         addRect(0, 35, height, carportLength, "#000000", "#ffffff");
-        addRect(0, 565, height, carportLength, "#000000", "#ffffff");
+        addRect(0, y, height, carportLength, "#000000", "#ffffff");
     }
 
     public void addRafters(double carportWidth, double carportLength){
@@ -62,12 +63,13 @@ public class SvgUtil {
         }
     }
 
-    public void addPosts(double carportLength){
+    public void addPoles(double carportLength, double carportWidth){
         int numberOfPoles = 4;
         int length = (int)carportLength;
         int maxPoleDistance = 340;
         int initialSpacing = 107;
         int fullLength = length - (int)initialSpacing;
+        int y = (int)carportWidth-38;
 
         if (fullLength > 0) {
             numberOfPoles = 2 * ((fullLength + maxPoleDistance - 1) / maxPoleDistance + 1);
@@ -76,9 +78,9 @@ public class SvgUtil {
             numberOfPoles = 4;
         }
 
-        for(int i = 0; i <= numberOfPoles / 2; i++){
+        for(int i = 0; i < numberOfPoles / 2; i++){
             addRect(initialSpacing, 32, 9.7, 9.7, "#000000", "#ffffff");
-            addRect(initialSpacing, 562, 9.7, 9.7, "#000000", "#ffffff");
+            addRect(initialSpacing, y, 9.7, 9.7, "#000000", "#ffffff");
             initialSpacing += maxPoleDistance-10;
         }
     }

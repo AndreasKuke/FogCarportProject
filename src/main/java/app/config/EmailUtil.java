@@ -21,9 +21,11 @@ public class EmailUtil {
     private static final String API_KEY = System.getenv("SENDGRID_API_KEY");
     private static final SendGrid sg = new SendGrid(API_KEY);
     private static final Email from = new Email("emilkriegel@gmail.com", "Johannes Fog Byggemarked");
-    private static final String OrderConfirmationID = "d-1b6aefc418c3427880a7df567316899d"; //Template ID from SendGrid
-    private static final String FinalConfirmationID = null;
-    private static final String PaymentConfirmationID = null;
+
+    //Template ID's taken from SendGrid.com
+    private static final String OrderConfirmationID = "d-1b6aefc418c3427880a7df567316899d";
+    private static final String FinalConfirmationID = "d-11983f5f46e74b7eb645130c19ca529c";
+    private static final String PaymentConfirmationID = "d-f1849a755bc8425faaabcd7140eb220e";
 
     public static void SendOrderConfirmation(Context ctx, Order order) {
         User user = ctx.sessionAttribute("currentUser");
@@ -61,6 +63,41 @@ public class EmailUtil {
         }
     }
 
+    public static void sendFinalConfirmation(Context ctx, Order order){
+        User user = ctx.sessionAttribute("currentUser");
+        Mail mail = new Mail();
+        mail.setFrom(from);
+
+        Personalization personalization = new Personalization();
+
+        personalization.addTo(new Email(user.getEmail(), user.getUsername()));
+        personalization.addDynamicTemplateData("name", user.getUsername());
+        personalization.addDynamicTemplateData("orderNumber", order.getOrder_ID());
+
+        Attachments attachment = createSvgAttachment(order);
+
+        mail.addPersonalization(personalization);
+        mail.addAttachments(attachment);
+        mail.addCategory("carport");
+        mail.setTemplateId(FinalConfirmationID);
+
+        Request request = new Request();
+
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+
+            Response response = sg.api(request);
+            System.out.println(response.getStatusCode());
+            System.out.println(response.getBody());
+            System.out.println(response.getHeaders());
+        } catch (IOException e) {
+            System.out.println("Error sending mail");
+            e.printStackTrace();
+        }
+    }
+
     public static void sendPaymentConfirmation(Context ctx, Order order){
         User user = ctx.sessionAttribute("currentUser");
         Mail mail = new Mail();
@@ -70,8 +107,7 @@ public class EmailUtil {
 
         personalization.addTo(new Email(user.getEmail(), user.getUsername()));
         personalization.addDynamicTemplateData("name", user.getUsername());
-        personalization.addDynamicTemplateData("login", user.getEmail());
-        personalization.addDynamicTemplateData("number", user.getPhoneNumber());
+        personalization.addDynamicTemplateData("orderNumber", order.getOrder_ID());
 
         Attachments attachment = createSvgAttachment(order);
 
@@ -96,7 +132,6 @@ public class EmailUtil {
             e.printStackTrace();
         }
     }
-
 
     public static Attachments createSvgAttachment(Order order){
         SvgUtil svg = new SvgUtil();

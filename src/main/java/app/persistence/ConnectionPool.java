@@ -106,6 +106,8 @@ public class ConnectionPool {
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        //Tilføjet for at fikse MacOS problem med TimeZone format
+        config.addDataSourceProperty("TimeZone", "Europe/Copenhagen");
 
         return new HikariDataSource(config);
     }
