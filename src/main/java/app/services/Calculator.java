@@ -60,6 +60,7 @@ public class Calculator {
 
         if(length > 600){
             extraBeams(order, length);
+            length = 600;
         }
 
         Integer beamPartId = partMapper.getPartIdByName("45x195 mm. spærtræ ubh.");

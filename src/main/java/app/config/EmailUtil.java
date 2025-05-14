@@ -1,17 +1,20 @@
 package app.config;
 
+import app.entities.Order;
 import app.entities.User;
-import app.persistence.ConnectionPool;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Attachments;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 import io.javalin.http.Context;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 public class EmailUtil {
 
@@ -22,7 +25,7 @@ public class EmailUtil {
     private static final String FinalConfirmationID = null;
     private static final String PaymentConfirmationID = null;
 
-    public static void SendOrderConfirmation(Context ctx) {
+    public static void SendOrderConfirmation(Context ctx, Order order) {
         User user = ctx.sessionAttribute("currentUser");
         Mail mail = new Mail();
         mail.setFrom(from);
@@ -34,7 +37,10 @@ public class EmailUtil {
         personalization.addDynamicTemplateData("login", user.getEmail());
         personalization.addDynamicTemplateData("number", user.getPhoneNumber());
 
+        Attachments attachment = createSvgAttachment(order);
+
         mail.addPersonalization(personalization);
+        mail.addAttachments(attachment);
         mail.addCategory("carport");
         mail.setTemplateId(OrderConfirmationID);
 
@@ -53,5 +59,62 @@ public class EmailUtil {
             System.out.println("Error sending mail");
             e.printStackTrace();
         }
+    }
+
+    public static void sendPaymentConfirmation(Context ctx, Order order){
+        User user = ctx.sessionAttribute("currentUser");
+        Mail mail = new Mail();
+        mail.setFrom(from);
+
+        Personalization personalization = new Personalization();
+
+        personalization.addTo(new Email(user.getEmail(), user.getUsername()));
+        personalization.addDynamicTemplateData("name", user.getUsername());
+        personalization.addDynamicTemplateData("login", user.getEmail());
+        personalization.addDynamicTemplateData("number", user.getPhoneNumber());
+
+        Attachments attachment = createSvgAttachment(order);
+
+        mail.addPersonalization(personalization);
+        mail.addAttachments(attachment);
+        mail.addCategory("carport");
+        mail.setTemplateId(PaymentConfirmationID);
+
+        Request request = new Request();
+
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+
+            Response response = sg.api(request);
+            System.out.println(response.getStatusCode());
+            System.out.println(response.getBody());
+            System.out.println(response.getHeaders());
+        } catch (IOException e) {
+            System.out.println("Error sending mail");
+            e.printStackTrace();
+        }
+    }
+
+
+    public static Attachments createSvgAttachment(Order order){
+        SvgUtil svg = new SvgUtil();
+        svg.appendFromOrder(order);
+        String svgContent = svg.buildSvg();
+
+        //Gets the .svg file as bytes using UTF_8-encoding, then uses Java's Base64 encoder to encode the bytes to Base64
+        String encodedSvg = Base64.getEncoder().encodeToString(svgContent.getBytes(StandardCharsets.UTF_8));
+
+        Attachments attachment = new Attachments();
+        attachment.setContent(encodedSvg);
+        //"image/svg+xml" is not just a name. It tells the browser/email client etc what kind of file it is.
+        attachment.setType("image/svg+xml");
+        attachment.setFilename("carport.svg");
+        //"attachment" tells SendGrid that it is an attachment, not to be displayed inline in the e-mail.
+        attachment.setDisposition("attachment");
+        attachment.setContentId("carportDrawing");
+
+        return attachment;
     }
 }

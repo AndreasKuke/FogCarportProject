@@ -5,6 +5,7 @@ import app.config.ThymeleafConfig;
 import app.controllers.OrderController;
 import app.controllers.PriceController;
 import app.controllers.UserController;
+import app.entities.Order;
 import app.persistence.ConnectionPool;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
@@ -16,6 +17,7 @@ import com.sendgrid.helpers.mail.objects.Personalization;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Logger;
 
