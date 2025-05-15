@@ -7,6 +7,8 @@ public class PartsList {
     private int partVariant_id;
     private int amount;
     private String description;
+    private String partName;
+    private int length;
 
     public PartsList(int partsList_id, int order_id, int partVariant_id, int amount, String description) {
         this.partsList_id = partsList_id;
@@ -21,6 +23,22 @@ public class PartsList {
         this.order_id = order_id;
         this.partVariant_id = partVariant_id;
         this.amount = amount;
+    }
+
+    public PartsList(int order_id, int partVariant_id, int amount, String description) {
+        this.order_id = order_id;
+        this.partVariant_id = partVariant_id;
+        this.amount = amount;
+        this.description = description;
+    }
+
+    public PartsList(int order_id, int partVariant_id, int amount, String description, String partName, int length) {
+        this.order_id = order_id;
+        this.partVariant_id = partVariant_id;
+        this.amount = amount;
+        this.description = description;
+        this.partName = partName;
+        this.length = length;
     }
 
     public int getPartsList_id() {
@@ -61,5 +79,21 @@ public class PartsList {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public String getPartName() {
+        return partName;
+    }
+
+    public void setPartName(String partName) {
+        this.partName = partName;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
     }
 }
