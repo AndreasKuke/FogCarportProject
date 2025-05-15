@@ -1,6 +1,7 @@
 package app.persistence;
 
 import app.entities.User;
+import app.exceptions.DatabaseException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -103,6 +104,23 @@ public class UserMapper {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public String getUserEmailByID(int user_id){
+        String sql = "SELECT user_mail from users WHERE user_id = ?";
+
+        try (Connection conn = connectionPool.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setInt(1, user_id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()){
+                return rs.getString("user_mail");
+            }else {
+                throw new DatabaseException("No user with id:" + user_id);
+            }
+        } catch (SQLException | DatabaseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

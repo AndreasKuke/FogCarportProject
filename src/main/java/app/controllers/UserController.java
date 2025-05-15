@@ -1,16 +1,23 @@
 package app.controllers;
 
+import app.config.PasswordUtil;
+import app.entities.Order;
 import app.entities.User;
+import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
+import app.persistence.OrderMapper;
 import app.persistence.UserMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+
+import java.util.List;
 
 public class UserController {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(
             "postgres", "postgres", "jdbc:postgresql://localhost:5432/%s?currentSchema=public", "carport"
     );
     private static final UserMapper userMapper = new UserMapper(connectionPool);
+    private static final OrderMapper orderMapper = new OrderMapper(connectionPool);
 
     public static void routes(Javalin app) {
         app.get("/", ctx -> ctx.redirect("/index"));
@@ -31,12 +38,13 @@ public class UserController {
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
+        String hashedFromDB = userMapper.getUserPasswordFromDB(email);
+
         try {
             User user = userMapper.getUserByEmail(email);
 
-            if (user != null && user.getPassword().equals(password)) {
+            if (PasswordUtil.checkPassword(password, hashedFromDB)) {
                 ctx.sessionAttribute("currentUser", user);
-
                 if (user.isAdmin()) {
                     ctx.redirect("/adminPage");
                 } else {
@@ -60,6 +68,8 @@ public class UserController {
         String phoneNumber = ctx.formParam("phone");
         String name = ctx.formParam("username");
 
+        String hashedPassword = PasswordUtil.hashPassword(password);
+
         User existingUser = userMapper.getUserByEmail(email);
         if (existingUser != null) {
             ctx.sessionAttribute("Error", "Username already exists.");
@@ -70,7 +80,7 @@ public class UserController {
                 ctx.sessionAttribute("Error", "Passwords do not match.");
                 ctx.redirect("/register");
             } else {
-                userMapper.createUser(email, password, phoneNumber, name);
+                userMapper.createUser(email, hashedPassword, phoneNumber, name);
                 ctx.redirect("/login");
             }
         }
@@ -106,8 +116,13 @@ public class UserController {
     public static void adminPage(Context ctx) {
         User user = ctx.sessionAttribute("currentUser");
         if (user != null && user.isAdmin()) {
-            //OrderController.showOrders(ctx);
-            ctx.render("adminPage.html");
+            try {
+                List<Order> orders = orderMapper.getAllOrders();
+                ctx.attribute("orders", orders);
+                ctx.render("adminPage.html");
+            } catch (DatabaseException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             ctx.redirect("/login");
         }
