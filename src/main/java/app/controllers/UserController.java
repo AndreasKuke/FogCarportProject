@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.config.PasswordUtil;
 import app.entities.Order;
 import app.entities.User;
 import app.exceptions.DatabaseException;
@@ -37,12 +38,13 @@ public class UserController {
         String email = ctx.formParam("email");
         String password = ctx.formParam("password");
 
+        String hashedFromDB = userMapper.getUserPasswordFromDB(email);
+
         try {
             User user = userMapper.getUserByEmail(email);
 
-            if (user != null && user.getPassword().equals(password)) {
+            if (PasswordUtil.checkPassword(password, hashedFromDB)) {
                 ctx.sessionAttribute("currentUser", user);
-
                 if (user.isAdmin()) {
                     ctx.redirect("/adminPage");
                 } else {
@@ -66,6 +68,8 @@ public class UserController {
         String phoneNumber = ctx.formParam("phone");
         String name = ctx.formParam("username");
 
+        String hashedPassword = PasswordUtil.hashPassword(password);
+
         User existingUser = userMapper.getUserByEmail(email);
         if (existingUser != null) {
             ctx.sessionAttribute("Error", "Username already exists.");
@@ -76,7 +80,7 @@ public class UserController {
                 ctx.sessionAttribute("Error", "Passwords do not match.");
                 ctx.redirect("/register");
             } else {
-                userMapper.createUser(email, password, phoneNumber, name);
+                userMapper.createUser(email, hashedPassword, phoneNumber, name);
                 ctx.redirect("/login");
             }
         }
