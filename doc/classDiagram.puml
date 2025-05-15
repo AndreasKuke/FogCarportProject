@@ -33,34 +33,82 @@ Class Carport {
 }
 
 Package util {
-Class Calculator
+class Calculator{
++void calcPoles(Order order)
++void calcBeams(Order order)
++void calcRafters(Order order)
++void extraBeams(Order order, int length)
++void countPoles(Order order)
++void countBeams(Order order)
++void countRafters(Order order)
++void countExtraBeams(Order order)
++void calcPrice(Order order)
+}
+
+class EmailUtil {
+    +void SendOrderConfirmation(Context ctx, Order order)
+    +void sendFinalConfirmation(Context ctx, Order order)
+    +void sendPaymentConfirmation(Context ctx, Order order)
+    +Attachments createSvgAttachment(Order order)
+}
+
+class SvgUtil {
+    +SvgUtil()
+    +void addRect(int x, int y, double height, double width, String stroke, String fill)
+    +void addLine(int x1, int y1, int x2, int y2, String style)
+    +String buildSvg()
+    +void appendFromOrder(Order order)
+    +void addFrame(double carportWidth, double carportLength)
+    +void addBeams(double carportLength, double carportWidth)
+    +void addRafters(double carportWidth, double carportLength)
+    +void addPoles(double carportLength, double carportWidth)
+}
 
 Class CarportMapper{
 
 }
 
-Class OrderMapper{
+class OrderMapper{
 +Order getOrder(int id)
 +void insertOrder(Order order)
++void updateOrderPrice(Order order)
++int getNewestOrderID()
 +List<Order> getAllOrders()
 }
 
-Class PartMapper{
-+Part getPartByID(int id)
+class PartMapper {
+  - connectionPool: ConnectionPool
+  + Part getPartByID(id: int):
+  + Integer getPartIdByName(partName: String)
+  + Part getPartByName(partName: String)
 }
 
-Class UserMapper{
-+User getUserByEmail(String email)
-+User getUserByID(int id)
-+void createUser(String email, String password, String phoneNumber, String name)
+class UserMapper {
+    +UserMapper(ConnectionPool connectionPool)
+    +User getUserByID(int id)
+    +User getUserByEmail(String email)
+    +void createUser(String email, String password, String phoneNumber, String name)
+    +String getUserPasswordFromDB(String email)
+    +String getUserEmailByID(int user_id)
 }
 
 Class CarportController{
 
 }
 
-Class OrderController{
-+void OrderCreate(Context ctx)
+class PriceController {
+    +PriceController(ConnectionPool connectionPool)
+    +void routes(Javalin app)
+    -void calculatePrice(Context ctx)
+    -int calcPolesQuantity(Order order)
+    -int calcBeamsQuantity(Order order)
+    -int calcRaftersQuantity(Order order)
+    -int getPriceByName(String partName)
+}
+
+class OrderController {
+    +OrderController(ConnectionPool connectionPool)
+    +static void OrderCreate(Context ctx)
 }
 
 Class PartController{

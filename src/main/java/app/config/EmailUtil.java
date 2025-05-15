@@ -109,6 +109,7 @@ public class EmailUtil {
         personalization.addDynamicTemplateData("name", user.getUsername());
         personalization.addDynamicTemplateData("orderNumber", order.getOrder_ID());
 
+        //Nedenstående createSvgAttachment kan erstattes med metode for stykliste
         Attachments attachment = createSvgAttachment(order);
 
         mail.addPersonalization(personalization);
