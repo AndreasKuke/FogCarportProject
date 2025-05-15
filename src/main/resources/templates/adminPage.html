@@ -74,7 +74,13 @@
                 <td th:text="${order.date}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
                 <td th:text="${order.price}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
                 <td th:text="${order.status}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
+                <td style="padding: 8px; border-bottom: 1px solid #eee">
+                    <form th:action="@{'/admin/partsListPage/' + ${order.order_ID}}" method="GET">
+                        <button type="submit">Vis styk-liste</button>
+                    </form>
+                </td>
             </tr>
+
             </tbody>
         </table>
 

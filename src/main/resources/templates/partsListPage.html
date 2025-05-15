@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Styk-liste</title>
+</head>
+<body>
+
+<h2>Styk-liste for Ordre ID: <span th:text="${orderId}"></span></h2>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Træ & Tagplader</th>
+      <th>Variant-nummer</th>
+      <th>Længde</th>
+      <th>Antal</th>
+      <th>Beskrivelse</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="part : ${parts}">
+      <td th:text="${part.partName}"></td>
+      <td th:text="${part.partVariant_id}"></td>
+      <td th:text="${part.length}"></td>
+      <td th:text="${part.amount}"></td>
+      <td th:text="${part.description}"></td>
+    </tr>
+  </tbody>
+</table>
+
+<a href="/adminPage">Tilbage til admin</a>
+
+<div th:utext="${svg}"></div>
+</body>
+</html>
