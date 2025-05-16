@@ -1,6 +1,7 @@
 package app;
 
 import app.config.SessionConfig;
+import app.config.SvgUtil;
 import app.config.ThymeleafConfig;
 import app.controllers.OrderController;
 import app.controllers.PriceController;
@@ -17,6 +18,7 @@ import com.sendgrid.helpers.mail.objects.Personalization;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -60,6 +62,21 @@ public class Main {
 
         // price routes
         priceController.routes(app);
+
+        SvgUtil svg = new SvgUtil();
+
+        Order order = new Order(0, null, 300, 650, false);
+
+        svg.appendFromOrder(order);
+        String svgContent = svg.buildSvg();
+
+        try {
+            FileWriter writer = new FileWriter("carport.svg");
+            writer.write(svgContent);
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
