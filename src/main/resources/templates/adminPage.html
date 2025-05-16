@@ -73,7 +73,14 @@
                 <td th:text="${order.carport_length}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
                 <td th:text="${order.date}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
                 <td th:text="${order.price}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
-                <td th:text="${order.status}" style="padding: 8px; border-bottom: 1px solid #eee;"></td>
+                <!--<td th:text="${order.status}" style="padding: 8px; border-bottom: 1px solid #eee;"></td> -->
+                <td>
+                    <form th:action="@{'admin/orderStatus/toggle/' + ${order.order_ID}}" method="POST">
+                        <button type="submit" th:class="'status-button ' + (${order.status} ? 'completed' : 'pending')"
+                        th:text="${order.status} ? '✅' : '❌'">
+                        </button>
+                    </form>
+                </td>
                 <td style="padding: 8px; border-bottom: 1px solid #eee">
                     <form th:action="@{'/admin/partsListPage/' + ${order.order_ID}}" method="GET">
                         <button type="submit">Vis styk-liste</button>

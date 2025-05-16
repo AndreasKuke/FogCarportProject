@@ -130,4 +130,18 @@ public class OrderMapper {
             throw new RuntimeException(e);
         }
     }
+
+    public void updateOrderStatus(Order order){
+        String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
+
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setBoolean(1,order.isStatus());
+            stmt.setInt(2,order.getOrder_ID());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

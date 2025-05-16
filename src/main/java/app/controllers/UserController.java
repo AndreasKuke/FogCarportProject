@@ -38,6 +38,14 @@ public class UserController {
         app.get("/admin/partsListPage/{orderId}", ctx ->{
             showPartsListPage(ctx);
         });
+
+        app.post("/admin/orderStatus/toggle/{orderId}", ctx -> {
+            int orderId = Integer.parseInt(ctx.pathParam("orderId"));
+            Order order = orderMapper.getOrderById(orderId);
+            order.setStatus(!order.isStatus());
+            orderMapper.updateOrderStatus(order);
+            ctx.redirect("/adminPage");
+        });
     }
 
 
