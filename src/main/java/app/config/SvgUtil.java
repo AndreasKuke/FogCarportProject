@@ -71,6 +71,7 @@ public class SvgUtil {
         int fullLength = length - (int)initialSpacing;
         int y = (int)carportWidth-38;
 
+
         if (fullLength > 0) {
             numberOfPoles = 2 * ((fullLength + maxPoleDistance - 1) / maxPoleDistance + 1);
         }
