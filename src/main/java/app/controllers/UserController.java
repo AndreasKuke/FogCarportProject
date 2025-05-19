@@ -42,7 +42,8 @@ public class UserController {
         app.post("/admin/orderStatus/toggle/{orderId}", ctx -> {
             int orderId = Integer.parseInt(ctx.pathParam("orderId"));
             Order order = orderMapper.getOrderById(orderId);
-            order.setStatus(!order.isStatus());
+            String updateStatus = ctx.formParam("status-selection");
+            order.setStatus(updateStatus);
             orderMapper.updateOrderStatus(order);
             ctx.redirect("/adminPage");
         });

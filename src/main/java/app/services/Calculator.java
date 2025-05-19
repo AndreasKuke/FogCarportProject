@@ -26,14 +26,15 @@ public class Calculator {
         PartsListMapper partsListMapper = new PartsListMapper(connectionPool);
         int numberOfPoles = 2; // Two base poles at the end.
         int length = order.getCarport_length();
-        int maxPoleDistance = 340; // Jon's ord ikke mine.
+        int maxPoleDistance = 310; // Jon's ord ikke mine.
         int initialSpacing = 100; // Luftrum mellem indgang og første pæl.
+
 
         int fullLength = length - initialSpacing; // Fjernet 100 cm luftrum fra start.
 
         if (fullLength > 0){
-            //numberOfPoles += (length - 1) / maxPoleDistance;
-            numberOfPoles = 2 * ((fullLength + maxPoleDistance - 1) / maxPoleDistance + 1);
+            int extraPoles = fullLength / maxPoleDistance;
+            numberOfPoles += extraPoles * 2;
         } else {
             numberOfPoles = 4;
         }
@@ -52,7 +53,6 @@ public class Calculator {
         }
     }
 
-    // TO-DO, tilføj så den kan sætte flere sammen end kun 2.
     public void calcBeams(Order order) throws DatabaseException {
         PartsListMapper partsListMapper = new PartsListMapper(connectionPool);
         int length = order.getCarport_length();
@@ -124,13 +124,14 @@ public class Calculator {
     private int countPoles(Order order) {
         int numberOfPoles = 2; // Two base poles at the end
         int length = order.getCarport_length();
-        int maxPoleDistance = 340;
+        int maxPoleDistance = 310;
         int initialSpacing = 100;
 
         int fullLength = length - initialSpacing;
 
         if (fullLength > 0) {
-            numberOfPoles = 2 * ((fullLength + maxPoleDistance - 1) / maxPoleDistance + 1);
+            int extraPoles = fullLength / maxPoleDistance;
+            numberOfPoles += extraPoles * 2;
         } else {
             numberOfPoles = 4;
         }

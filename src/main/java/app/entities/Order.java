@@ -8,7 +8,7 @@ public class Order {
     int carport_width;
     int carport_length;
     Date date;
-    boolean status;
+    String status;
     int user_ID;
     int price;
 
@@ -17,7 +17,7 @@ public class Order {
         this.date = date;
     }
 
-    public Order(int order_ID, Date date,  int carport_width, int carport_length, boolean status) {
+    public Order(int order_ID, Date date,  int carport_width, int carport_length, String status) {
         this.order_ID = order_ID;
         this.date = date;
         this.carport_width = carport_width;
@@ -25,7 +25,7 @@ public class Order {
         this.status = status;
     }
 
-    public Order(int order_ID, int user_ID, int carport_width, int carport_length, Date date, int price, boolean status) {
+    public Order(int order_ID, int user_ID, int carport_width, int carport_length, Date date, int price, String status) {
         this.user_ID = user_ID;
         this.order_ID = order_ID;
         this.date = date;
@@ -35,7 +35,7 @@ public class Order {
         this.price = price;
     }
 
-    public Order(int order_ID, int user_ID, int carport_width, int carport_length, Date date, boolean status, int price) {
+    public Order(int order_ID, int user_ID, int carport_width, int carport_length, Date date, String status, int price) {
         this.order_ID = order_ID;
         this.user_ID = user_ID;
         this.carport_width = carport_width;
@@ -81,11 +81,11 @@ public class Order {
         this.date = date;
     }
 
-    public boolean isStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

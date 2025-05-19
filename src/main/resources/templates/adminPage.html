@@ -76,9 +76,11 @@
                 <!--<td th:text="${order.status}" style="padding: 8px; border-bottom: 1px solid #eee;"></td> -->
                 <td>
                     <form th:action="@{'admin/orderStatus/toggle/' + ${order.order_ID}}" method="POST">
-                        <button type="submit" th:class="'status-button ' + (${order.status} ? 'completed' : 'pending')"
-                        th:text="${order.status} ? '✅' : '❌'">
-                        </button>
+                        <select name="status-selection" style="padding: 4px;" onchange="this.form.submit()">
+                            <option th:value="'pending'" th:selected="${order.status == 'pending'}">🟠 Pending</option>
+                            <option th:value="'accepted'" th:selected="${order.status == 'accepted'}">✅ Accepted</option>
+                            <option th:value="'denied'" th:selected="${order.status == 'denied'}">❌ Denied</option>
+                        </select>
                     </form>
                 </td>
                 <td style="padding: 8px; border-bottom: 1px solid #eee">
