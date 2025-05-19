@@ -7,22 +7,29 @@ import app.controllers.OrderController;
 import app.controllers.PriceController;
 import app.controllers.UserController;
 import app.entities.Order;
+import app.entities.PartsList;
+import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
+import app.persistence.OrderMapper;
+import app.persistence.PartsListMapper;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Attachments;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 
