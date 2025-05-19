@@ -93,10 +93,16 @@ INSERT INTO public.parts (part_id, part_name, unit, price) VALUES
 -- Insert data into part_variant
 INSERT INTO public.part_variant (part_variant_id, length, part_id) VALUES
                                                                        (1, 300, 1),
-                                                                       (2, 300, 2),
-                                                                       (3, 360, 2),
-                                                                       (4, 420, 2),
-                                                                       (5, 480, 2),
-                                                                       (6, 540, 2),
-                                                                       (7, 600, 2),
-                                                                       (8, 750, 2);
+                                                                       (2, 240, 2),
+                                                                       (3, 270, 2),
+                                                                       (4, 300, 2),
+                                                                       (5, 330, 2),
+                                                                       (6, 360, 2),
+                                                                       (7, 390, 2),
+                                                                       (8, 420, 2),
+                                                                       (9, 450, 2),
+                                                                       (10, 480, 2),
+                                                                       (11, 510, 2),
+                                                                       (12, 540, 2),
+                                                                       (13, 570, 2),
+                                                                       (14, 600, 2);
