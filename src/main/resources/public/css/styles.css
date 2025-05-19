@@ -73,3 +73,20 @@
 .button:hover {
     background-color: #0056b3;
 }
+
+.status-button{
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.completed {
+    color: green;
+}
+
+.pending {
+    color: red;
+}
+
+

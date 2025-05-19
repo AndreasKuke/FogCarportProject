@@ -63,20 +63,5 @@ public class Main {
         // price routes
         priceController.routes(app);
 
-        SvgUtil svg = new SvgUtil();
-
-        Order order = new Order(0, null, 300, 650, false);
-
-        svg.appendFromOrder(order);
-        String svgContent = svg.buildSvg();
-
-        try {
-            FileWriter writer = new FileWriter("carport.svg");
-            writer.write(svgContent);
-            writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
-
 }

@@ -23,7 +23,7 @@ public class OrderMapper {
         this.userMapper = new UserMapper(connectionPool);
     }
 
-    public Order getOrder(int id) throws DatabaseException , SQLException {
+    public Order getOrderById(int id) throws DatabaseException , SQLException {
         String sql = "SELECT * FROM orders WHERE order_id = ?";
 
         try (Connection conn = connectionPool.getConnection();
@@ -35,10 +35,12 @@ public class OrderMapper {
             if(rs.next()) {
                 return new Order(
                         rs.getInt("order_id"),
-                        rs.getDate("date"),
+                        rs.getInt("user_id"),
                         rs.getInt("carport_width"),
                         rs.getInt("carport_length"),
-                        rs.getBoolean("status")
+                        rs.getDate("date"),
+                        rs.getBoolean("status"),
+                        rs.getInt("price")
                 );
             }
         }catch (SQLException e) {
@@ -124,6 +126,20 @@ public class OrderMapper {
                 return rs.getInt(1);
             }
             throw new DatabaseException("Could not find any newest order ID");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateOrderStatus(Order order){
+        String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
+
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
+
+            stmt.setBoolean(1,order.isStatus());
+            stmt.setInt(2,order.getOrder_ID());
+            stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

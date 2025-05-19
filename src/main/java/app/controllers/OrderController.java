@@ -3,9 +3,11 @@ package app.controllers;
 import app.config.EmailUtil;
 import app.config.SvgUtil;
 import app.entities.Order;
+import app.entities.PartsList;
 import app.entities.User;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
+import app.persistence.PartsListMapper;
 import app.services.Calculator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -14,6 +16,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.time.Instant;
 import java.util.Calendar;
+import java.util.List;
 
 public class OrderController {
 
@@ -81,5 +84,33 @@ public static void OrderCreate(Context ctx) {
 
     }
 
+    public static void showPartsListSVG(Context ctx) {
+        try {
+            int orderId = Integer.parseInt(ctx.pathParam("orderId"));
 
+            OrderMapper orderMapper = new OrderMapper(connectionPool);
+            Order order = orderMapper.getOrderById(orderId);
+
+            PartsListMapper partsListMapper = new PartsListMapper(connectionPool);
+            List<PartsList> partsList = partsListMapper.getPartList(orderId);
+
+            SvgUtil svgUtil = new SvgUtil();
+            svgUtil.appendFromOrder(order);
+            String svgContent = svgUtil.buildSvg();
+
+
+            ctx.attribute("orderId",orderId);
+            ctx.attribute("partsList",partsList);
+            ctx.attribute("svg",svgContent);
+
+            ctx.render("partsListPage.html");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateStatus(Context ctx){
+
+
+    }
 }

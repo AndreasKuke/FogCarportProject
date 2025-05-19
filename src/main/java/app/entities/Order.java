@@ -35,6 +35,16 @@ public class Order {
         this.price = price;
     }
 
+    public Order(int order_ID, int user_ID, int carport_width, int carport_length, Date date, boolean status, int price) {
+        this.order_ID = order_ID;
+        this.user_ID = user_ID;
+        this.carport_width = carport_width;
+        this.carport_length = carport_length;
+        this.date = date;
+        this.status = status;
+        this.price = price;
+    }
+
     public Order(int order_ID) {
         this.order_ID = order_ID;
     }

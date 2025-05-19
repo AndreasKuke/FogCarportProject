@@ -1,15 +1,19 @@
 package app.controllers;
 
 import app.config.PasswordUtil;
+import app.config.SvgUtil;
 import app.entities.Order;
+import app.entities.PartsList;
 import app.entities.User;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
+import app.persistence.PartsListMapper;
 import app.persistence.UserMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserController {
@@ -30,6 +34,18 @@ public class UserController {
         app.post("/logout", UserController::logout);
         app.get("/profilePage", UserController::profilePage);
         app.get("/adminPage", UserController::adminPage);
+
+        app.get("/admin/partsListPage/{orderId}", ctx ->{
+            showPartsListPage(ctx);
+        });
+
+        app.post("/admin/orderStatus/toggle/{orderId}", ctx -> {
+            int orderId = Integer.parseInt(ctx.pathParam("orderId"));
+            Order order = orderMapper.getOrderById(orderId);
+            order.setStatus(!order.isStatus());
+            orderMapper.updateOrderStatus(order);
+            ctx.redirect("/adminPage");
+        });
     }
 
 
@@ -125,6 +141,32 @@ public class UserController {
             }
         } else {
             ctx.redirect("/login");
+        }
+    }
+
+    public static void showPartsListPage(Context ctx){
+        try {
+            int orderId = Integer.parseInt(ctx.pathParam("orderId"));
+            PartsListMapper partsListMapper = new PartsListMapper(connectionPool);
+            List<PartsList> parts = partsListMapper.getPartList(orderId);
+
+
+            ctx.attribute("orderId", orderId);
+            ctx.attribute("parts", parts);
+
+            //SVG
+            OrderMapper orderMapper = new OrderMapper(connectionPool);
+            Order order = orderMapper.getOrderById(orderId);
+            SvgUtil svgUtil = new SvgUtil();
+            svgUtil.appendFromOrder(order);
+            String svgContent = svgUtil.buildSvg();
+            ctx.attribute("svg", svgContent);
+
+            ctx.render("partsListPage.html");
+        } catch (DatabaseException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
