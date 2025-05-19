@@ -1,7 +1,11 @@
 package app.config;
 
 import app.entities.Order;
+import app.entities.PartsList;
 import app.entities.User;
+import app.exceptions.DatabaseException;
+import app.persistence.ConnectionPool;
+import app.persistence.PartsListMapper;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
@@ -13,14 +17,24 @@ import com.sendgrid.helpers.mail.objects.Personalization;
 import io.javalin.http.Context;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.List;
 
 public class EmailUtil {
 
     private static final String API_KEY = System.getenv("SENDGRID_API_KEY");
     private static final SendGrid sg = new SendGrid(API_KEY);
     private static final Email from = new Email("emilkriegel@gmail.com", "Johannes Fog Byggemarked");
+
+    //connectionPool to be able to use mapper. Is there a smarter way??
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "postgres";
+    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
+    private static final String DB = "carport";
+    private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
     //Template ID's taken from SendGrid.com
     private static final String OrderConfirmationID = "d-1b6aefc418c3427880a7df567316899d";
@@ -40,9 +54,11 @@ public class EmailUtil {
         personalization.addDynamicTemplateData("number", user.getPhoneNumber());
 
         Attachments attachment = createSvgAttachment(order);
+        Attachments attachment2 = createPartListAttachment(order);
 
         mail.addPersonalization(personalization);
         mail.addAttachments(attachment);
+        mail.addAttachments(attachment2);
         mail.addCategory("carport");
         mail.setTemplateId(OrderConfirmationID);
 
@@ -110,10 +126,12 @@ public class EmailUtil {
         personalization.addDynamicTemplateData("orderNumber", order.getOrder_ID());
 
         //Nedenstående createSvgAttachment kan erstattes med metode for stykliste
-        Attachments attachment = createSvgAttachment(order);
+        Attachments attachment1 = createSvgAttachment(order);
+        Attachments attachment2 = createPartListAttachment(order);
 
         mail.addPersonalization(personalization);
-        mail.addAttachments(attachment);
+        mail.addAttachments(attachment1);
+        mail.addAttachments(attachment2);
         mail.addCategory("carport");
         mail.setTemplateId(PaymentConfirmationID);
 
@@ -152,5 +170,39 @@ public class EmailUtil {
         attachment.setContentId("carportDrawing");
 
         return attachment;
+    }
+
+    public static Attachments createPartListAttachment(Order order){
+        PartsListMapper partsListMapper = new PartsListMapper(connectionPool);
+        try {
+            List<PartsList> partsList = partsListMapper.getPartList(order.getOrder_ID());
+            StringWriter stringWriter = new StringWriter();
+            PrintWriter writer = new PrintWriter(stringWriter);
+
+            writer.println("Beskrivelse;Længde;Antal;Beskrivelse");
+            for(PartsList p : partsList){
+                writer.printf("%s;%d;%d;%s;%n",
+                        p.getPartName(),
+                        p.getLength(),
+                        p.getAmount(),
+                        p.getDescription());
+            }
+            writer.flush();
+
+            byte[] csvBytes = stringWriter.toString().getBytes(StandardCharsets.UTF_8);
+            String base64csv = Base64.getEncoder().encodeToString(csvBytes);
+
+            Attachments attachment = new Attachments();
+            //setContent holds the actual attachment that goes into the email(the file)
+            attachment.setContent(base64csv);
+            //setType defines what filetype the attachment should be
+            attachment.setType("text/csv");
+            attachment.setFilename("Stykliste_" + order.getOrder_ID()+".csv");
+            attachment.setDisposition("attachment");
+
+            return attachment;
+        } catch (DatabaseException e) {
+            throw new RuntimeException("Could not create CSV attachment", e);
+        }
     }
 }
