@@ -40,7 +40,7 @@ public static void OrderCreate(Context ctx) {
         int width = Integer.parseInt(ctx.formParam("carport-width-selection"));
         int length = Integer.parseInt(ctx.formParam("carport-length-selection"));
         Date date = new Date(System.currentTimeMillis());
-        boolean status = false;
+        String status = "pending";
         int price; // Not final. Den skal tage fat i stykliste prisen.
 
         int userID = currentUser.getUser_ID();

@@ -56,7 +56,7 @@ public class PriceController {
             int width = Integer.parseInt(ctx.queryParam("carport-width-selection"));
 
             // Simulated order that currentUser will be using to see guiding price
-            Order tempOrder = new Order(0, 0, width, length, null, 0, false);
+            Order tempOrder = new Order(0, 0, width, length, null, 0, "pending");
 
             Calculator calculator = new Calculator(connectionPool);
 
