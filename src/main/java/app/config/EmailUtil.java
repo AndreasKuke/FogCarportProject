@@ -54,11 +54,9 @@ public class EmailUtil {
         personalization.addDynamicTemplateData("number", user.getPhoneNumber());
 
         Attachments attachment = createSvgAttachment(order);
-        Attachments attachment2 = createPartListAttachment(order);
 
         mail.addPersonalization(personalization);
         mail.addAttachments(attachment);
-        mail.addAttachments(attachment2);
         mail.addCategory("carport");
         mail.setTemplateId(OrderConfirmationID);
 

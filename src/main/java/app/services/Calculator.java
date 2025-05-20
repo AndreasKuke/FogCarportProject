@@ -11,7 +11,6 @@ import io.javalin.http.Context;
 
 public class Calculator {
 
-
     private ConnectionPool connectionPool;
     private PartVariantMapper partVariantMapper;
     private PartMapper partMapper;

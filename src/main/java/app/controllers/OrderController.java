@@ -55,7 +55,6 @@ public static void OrderCreate(Context ctx) {
 
         OrderMapper orderMapper = new OrderMapper(connectionPool);
 
-
         orderMapper.insertOrder(order);
         int orderID = orderMapper.getNewestOrderID();
         order.setOrder_ID(orderID);
@@ -75,7 +74,7 @@ public static void OrderCreate(Context ctx) {
         ctx.render("orderConfirmationPage.html"); // Bare en idé til en ny HTML side.
 
 
-        // EmailUtil.SendOrderConfirmation(ctx, order);
+        EmailUtil.SendOrderConfirmation(ctx, order);
         //"Af"-kommenteres for at begynde at sende mails af sted ved oprettelse af ordre
     } catch (Exception e) {
         e.printStackTrace();
