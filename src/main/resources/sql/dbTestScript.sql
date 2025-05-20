@@ -3,7 +3,7 @@
 BEGIN;
 
 
-CREATE TABLE IF NOT EXISTS public.orders
+CREATE TABLE IF NOT EXISTS test.orders
 (
     order_id serial NOT NULL,
     user_id serial NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS public.orders
     CONSTRAINT orders_pkey PRIMARY KEY (order_id)
     );
 
-CREATE TABLE IF NOT EXISTS public.part_variant
+CREATE TABLE IF NOT EXISTS test.part_variant
 (
     part_variant_id serial NOT NULL,
     length integer NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS public.part_variant
     CONSTRAINT part_variant_pkey PRIMARY KEY (part_variant_id)
     );
 
-CREATE TABLE IF NOT EXISTS public.parts
+CREATE TABLE IF NOT EXISTS test.parts
 (
     part_id serial NOT NULL,
     part_name character varying COLLATE pg_catalog."default" NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS public.parts
     CONSTRAINT parts_pkey PRIMARY KEY (part_id)
     );
 
-CREATE TABLE IF NOT EXISTS public.parts_list
+CREATE TABLE IF NOT EXISTS test.parts_list
 (
     parts_list_id serial NOT NULL,
     order_id serial NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS public.parts_list
     CONSTRAINT parts_list_pkey PRIMARY KEY (parts_list_id)
     );
 
-CREATE TABLE IF NOT EXISTS public.users
+CREATE TABLE IF NOT EXISTS test.users
 (
     user_id serial NOT NULL,
     user_name character varying COLLATE pg_catalog."default" NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS public.users
     CONSTRAINT users_pkey PRIMARY KEY (user_id)
     );
 
-ALTER TABLE IF EXISTS public.orders
+ALTER TABLE IF EXISTS test.orders
     ADD CONSTRAINT orders_user_id_fkey FOREIGN KEY (user_id)
     REFERENCES public.users (user_id) MATCH SIMPLE
     ON UPDATE NO ACTION
@@ -60,7 +60,7 @@ ALTER TABLE IF EXISTS public.orders
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS public.part_variant
+ALTER TABLE IF EXISTS test.part_variant
     ADD CONSTRAINT part_variant_part_id_fkey FOREIGN KEY (part_id)
     REFERENCES public.parts (part_id) MATCH SIMPLE
     ON UPDATE NO ACTION
@@ -68,14 +68,14 @@ ALTER TABLE IF EXISTS public.part_variant
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS public.parts_list
+ALTER TABLE IF EXISTS test.parts_list
     ADD CONSTRAINT parts_list_order_id_fkey FOREIGN KEY (order_id)
     REFERENCES public.orders (order_id) MATCH SIMPLE
     ON UPDATE NO ACTION
        ON DELETE NO ACTION;
 
 
-ALTER TABLE IF EXISTS public.parts_list
+ALTER TABLE IF EXISTS test.parts_list
     ADD CONSTRAINT parts_list_part_variant_id_fkey FOREIGN KEY (part_variant_id)
     REFERENCES public.part_variant (part_variant_id) MATCH SIMPLE
     ON UPDATE NO ACTION
@@ -85,30 +85,26 @@ ALTER TABLE IF EXISTS public.parts_list
 END;
 
 -- Insert data into parts
-INSERT INTO public.parts (part_id, part_name, unit, price) VALUES
-                                                               (1, '97x97 mm. trykimp. Stolpe', 'stk', 42),
-                                                               (2, '45x195 mm. spærtræ ubh.', 'stk', 62);
+INSERT INTO test.parts (part_id, part_name, unit, price) VALUES
+                                                             (1, '97x97 mm. trykimp. Stolpe', 'stk', 42),
+                                                             (2, '45x195 mm. spærtræ ubh.', 'stk', 62);
 
 -- Insert data into part_variant
-INSERT INTO public.part_variant (part_variant_id, length, part_id) VALUES
-                                                                       (1, 300, 1),
-                                                                       (2, 240, 2),
-                                                                       (3, 270, 2),
-                                                                       (4, 300, 2),
-                                                                       (5, 330, 2),
-                                                                       (6, 360, 2),
-                                                                       (7, 390, 2),
-                                                                       (8, 420, 2),
-                                                                       (9, 450, 2),
-                                                                       (10, 480, 2),
-                                                                       (11, 510, 2),
-                                                                       (12, 540, 2),
-                                                                       (13, 570, 2),
-                                                                       (14, 600, 2);
-
-CREATE TYPE status
-    AS
-    ENUM('pending', 'accepted', 'denied');
+INSERT INTO test.part_variant (part_variant_id, length, part_id) VALUES
+                                                                     (1, 300, 1),
+                                                                     (2, 240, 2),
+                                                                     (3, 270, 2),
+                                                                     (4, 300, 2),
+                                                                     (5, 330, 2),
+                                                                     (6, 360, 2),
+                                                                     (7, 390, 2),
+                                                                     (8, 420, 2),
+                                                                     (9, 450, 2),
+                                                                     (10, 480, 2),
+                                                                     (11, 510, 2),
+                                                                     (12, 540, 2),
+                                                                     (13, 570, 2),
+                                                                     (14, 600, 2);
 
 ALTER TABLE orders
     ADD COLUMN status status DEFAULT 'pending';

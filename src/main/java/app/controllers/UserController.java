@@ -18,7 +18,7 @@ import java.util.List;
 
 public class UserController {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(
-            "postgres", "postgres", "jdbc:postgresql://localhost:5432/%s?currentSchema=public", "carport"
+            "postgres", "postgres", "jdbc:postgresql://46.101.133.216:5432/%s?currentSchema=public", "carport"
     );
     private static final UserMapper userMapper = new UserMapper(connectionPool);
     private static final OrderMapper orderMapper = new OrderMapper(connectionPool);
