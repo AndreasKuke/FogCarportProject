@@ -121,7 +121,7 @@ public class Calculator {
     }
 
     // Count number of poles, beams and rafters methods since the previous methods dont return anything
-    private int countPoles(Order order) {
+    protected int countPoles(Order order) {
         int numberOfPoles = 2; // Two base poles at the end
         int length = order.getCarport_length();
         int maxPoleDistance = 310;
@@ -139,20 +139,20 @@ public class Calculator {
         return numberOfPoles;
     }
 
-    private int countBeams(Order order) {
+    protected int countBeams(Order order) {
         int numberOfBeams = 2; // Standard is 2 beams
 
         return numberOfBeams;
     }
 
-    private int countRafters(Order order) {
+    protected int countRafters(Order order) {
         int length = order.getCarport_length();
         int rafterSpacing = 55;
 
         return (length + rafterSpacing - 1) / rafterSpacing;
     }
 
-    private int countExtraBeams(Order order) {
+    protected int countExtraBeams(Order order) {
         int length = order.getCarport_length();
         int extraBeams = 0;
 
