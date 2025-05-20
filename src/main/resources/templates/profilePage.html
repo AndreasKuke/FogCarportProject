@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Min Profil - Fog Konto</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/profilePage.css">
+    <script src="/js/profilePage.js"></script>
 </head>
 <body>
 
@@ -43,14 +45,55 @@
 </header>
 
 <div class="content-wrapper">
-    <div class="container">
-        <h2>Velkommen tilbage!</h2>
-        <p th:text="'Email: ' + ${session.currentUser.email}"></p>
-        <p th:text="'Brugernavn: ' + ${session.currentUser.username}"></p>
+    <h2 style="text-align: center;">Velkommen tilbage!</h2>
+    <div class="profile-wrapper">
 
-        <form action="/logout" method="post">
-            <button class="button">Log ud</button>
-        </form>
+        <div class="orders">
+            <h3>Dine Ordrer</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>Ordre ID</th>
+                    <th>Bredde</th>
+                    <th>Længde</th>
+                    <th>Dato</th>
+                    <th>Pris</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orders}">
+                    <td th:text="${order.order_ID}"></td>
+                    <td th:text="${order.carport_width}"></td>
+                    <td th:text="${order.carport_length}"></td>
+                    <td th:text="${#dates.format(order.date, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${order.price + ' kr'}"></td>
+                    <td>
+                        <span th:switch="${order.status}">
+                        <span th:case="'pending'">🟠 Ventende</span>
+                        <span th:case="'accepted'">✅ Accepteret</span>
+                        <span th:case="'denied'">❌ Afvist</span>
+                        </span>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+            <button class="pay-button">Betal nu</button>
+
+        </div>
+
+        <div class="user-info">
+            <h3>Dine oplysninger</h3>
+            <p th:text="'Email: ' + ${session.currentUser.email}"></p>
+            <p th:text="'Brugernavn: ' + ${session.currentUser.username}"></p>
+            <p th:text="'Telefonnummer: ' + ${session.currentUser.phoneNumber}"></p>
+
+            <form action="/logout" method="post">
+                <button class="button">Log ud</button>
+            </form>
+        </div>
+
     </div>
 </div>
 

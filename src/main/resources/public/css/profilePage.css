@@ -1,0 +1,60 @@
+.profile-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 40px;
+}
+
+.orders, .user-info {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.orders h3,
+.user-info h3 {
+    margin-top: 0;
+}
+
+.user-info button {
+    margin-top: 20px;
+}
+
+.orders table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.orders th, .orders td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.orders th {
+    border-bottom: 2px solid #ddd;
+    font-weight: 600;
+    background-color: #f0f0f0;
+}
+.pay-button {
+    margin-top: 20px;
+    padding: 8px 16px;
+    background-color: #007bff; /* blue */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    float: right; /* aligns button to the right */
+    width: auto; /* makes button width fit content */
+    display: inline-block;
+}
+
+.pay-button:hover {
+    background-color: #0056b3;
+}
+

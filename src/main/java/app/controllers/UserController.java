@@ -111,6 +111,8 @@ public class UserController {
     public static void profilePage(Context ctx) {
         User user = ctx.sessionAttribute("currentUser");
         if (user != null) {
+            List<Order> orders = orderMapper.getOrdersByUserId(user.getUser_ID());
+            ctx.attribute("orders", orders);
                 ctx.render("profilePage.html");
         } else {
             ctx.redirect("/login");

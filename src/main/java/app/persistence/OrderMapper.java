@@ -4,6 +4,7 @@ import app.entities.Order;
 import app.entities.User;
 import app.exceptions.DatabaseException;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,22 +18,22 @@ public class OrderMapper {
     private final ConnectionPool connectionPool;
     private UserMapper userMapper;
 
-    public  OrderMapper(ConnectionPool connectionPool) {
+    public OrderMapper(ConnectionPool connectionPool) {
 
         this.connectionPool = connectionPool;
         this.userMapper = new UserMapper(connectionPool);
     }
 
-    public Order getOrderById(int id) throws DatabaseException , SQLException {
+    public Order getOrderById(int id) throws DatabaseException, SQLException {
         String sql = "SELECT * FROM orders WHERE order_id = ?";
 
         try (Connection conn = connectionPool.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)){
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()) {
+            if (rs.next()) {
                 return new Order(
                         rs.getInt("order_id"),
                         rs.getInt("user_id"),
@@ -43,7 +44,7 @@ public class OrderMapper {
                         rs.getInt("price")
                 );
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -54,12 +55,12 @@ public class OrderMapper {
                 "VALUES (?, ?, ?, ?::status, ?, ?)";
 
         try (Connection conn = connectionPool.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)){
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, order.getCarport_width());
             stmt.setInt(2, order.getCarport_length());
             stmt.setDate(3, order.getDate());
-            stmt.setString(4,order.getStatus());
+            stmt.setString(4, order.getStatus());
             stmt.setInt(5, order.getUser_ID());
             stmt.setInt(6, order.getPrice());
 
@@ -74,7 +75,7 @@ public class OrderMapper {
         String sql = "UPDATE orders SET price = ? WHERE order_id = ?";
 
         try (Connection conn = connectionPool.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)){
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, order.getPrice());
             stmt.setInt(2, order.getOrder_ID());
             stmt.executeUpdate();
@@ -90,21 +91,21 @@ public class OrderMapper {
         List<Order> orders = new ArrayList<>();
 
         try (Connection conn = connectionPool.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)){
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                        int user_id = rs.getInt("user_id");
-                        int order_id = rs.getInt("order_id");
-                        Date date = rs.getDate("date");
-                        int width = rs.getInt("carport_width");
-                        int length = rs.getInt("carport_length");
-                        String status = rs.getString("status");
-                        int price = rs.getInt("price");
+                int user_id = rs.getInt("user_id");
+                int order_id = rs.getInt("order_id");
+                Date date = rs.getDate("date");
+                int width = rs.getInt("carport_width");
+                int length = rs.getInt("carport_length");
+                String status = rs.getString("status");
+                int price = rs.getInt("price");
 
                 String userEmail = userMapper.getUserEmailByID(user_id);
-                Order order = new Order(order_id, user_id, width,length, date, price, status);
+                Order order = new Order(order_id, user_id, width, length, date, price, status);
                 order.setUserMail(userEmail);
                 orders.add(order);
             }
@@ -120,9 +121,9 @@ public class OrderMapper {
         String sql = "SELECT MAX(order_id) FROM orders";
 
         try (Connection conn = connectionPool.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery()){
-            if (rs.next()){
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
                 return rs.getInt(1);
             }
             throw new DatabaseException("Could not find any newest order ID");
@@ -131,17 +132,45 @@ public class OrderMapper {
         }
     }
 
-    public void updateOrderStatus(Order order){
+    public void updateOrderStatus(Order order) {
         String sql = "UPDATE orders SET status = ?::status WHERE order_id = ?";
 
         try (Connection conn = connectionPool.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)){
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1,order.getStatus());
-            stmt.setInt(2,order.getOrder_ID());
+            stmt.setString(1, order.getStatus());
+            stmt.setInt(2, order.getOrder_ID());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Order> getOrdersByUserId(int userId) {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM orders WHERE user_id = ?";
+
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Order order = new Order(
+                        rs.getInt("order_id"),
+                        rs.getInt("user_id"),
+                        rs.getInt("carport_width"),
+                        rs.getInt("carport_length"),
+                        rs.getDate("date"),
+                        rs.getString("status"),
+                        rs.getInt("price")
+                );
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return orders;
     }
 }
