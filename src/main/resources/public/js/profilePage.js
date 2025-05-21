@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const payButton = document.querySelector('.pay-button');
-    if (payButton) {
-        payButton.addEventListener('click', event => {
+    const payButton = document.querySelectorAll('.pay-button');
+    payButton.forEach(button => {
+        button.addEventListener('click', event => {
             event.preventDefault();
-            alert('Betaling bekræftet!');
+            alert('Betaling bekræftet! Du vil få sendt en mail med stykliste hurtigst muligt.');
         });
-    }
+    })
 });

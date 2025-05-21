@@ -70,4 +70,6 @@ public class Main {
         // price routes
         priceController.routes(app);
     }
+
+
 }
