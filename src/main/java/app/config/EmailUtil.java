@@ -117,7 +117,8 @@ public class EmailUtil {
     }
 
     public static void sendPaymentConfirmation(Context ctx, Order order){
-        User user = ctx.sessionAttribute("currentUser");
+        int userId = order.getUser_ID();
+        User user = userMapper.getUserByID(userId);
         Mail mail = new Mail();
         mail.setFrom(from);
 
@@ -143,6 +144,7 @@ public class EmailUtil {
             request.setMethod(Method.POST);
             request.setEndpoint("mail/send");
             request.setBody(mail.build());
+
 
             Response response = sg.api(request);
             System.out.println(response.getStatusCode());

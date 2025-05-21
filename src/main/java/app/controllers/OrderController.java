@@ -35,6 +35,7 @@ public static void OrderCreate(Context ctx) {
         if (currentUser == null) {
             ctx.attribute("message", "Du skal logge ind for at kunne fuldføre din bestilling.");
             ctx.render("loginPage.html");
+            return;
         }
 
         int width = Integer.parseInt(ctx.formParam("carport-width-selection"));
