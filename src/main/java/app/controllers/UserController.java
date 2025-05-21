@@ -35,6 +35,7 @@ public class UserController {
         app.post("/logout", UserController::logout);
         app.get("/profilePage", UserController::profilePage);
         app.get("/adminPage", UserController::adminPage);
+        app.post("/profilePage", UserController::profilePage);
 
         app.get("/admin/partsListPage/{orderId}", ctx ->{
             showPartsListPage(ctx);
@@ -50,6 +51,12 @@ public class UserController {
             }
             orderMapper.updateOrderStatus(order);
             ctx.redirect("/adminPage");
+        });
+        app.post("/user/payment/{orderId}", ctx -> {
+            int orderId = Integer.parseInt(ctx.pathParam("orderId"));
+            Order order = orderMapper.getOrderById(orderId);
+            EmailUtil.sendPaymentConfirmation(ctx, order);
+            ctx.redirect("/profilePage");
         });
     }
 
