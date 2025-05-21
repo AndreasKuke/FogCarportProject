@@ -6,6 +6,7 @@ import app.entities.User;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.PartsListMapper;
+import app.persistence.UserMapper;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
@@ -35,6 +36,8 @@ public class EmailUtil {
     private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
     private static final String DB = "carport";
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
+
+    private static UserMapper userMapper = new UserMapper(connectionPool);
 
     //Template ID's taken from SendGrid.com
     private static final String OrderConfirmationID = "d-1b6aefc418c3427880a7df567316899d";
@@ -78,7 +81,8 @@ public class EmailUtil {
     }
 
     public static void sendFinalConfirmation(Context ctx, Order order){
-        User user = ctx.sessionAttribute("currentUser");
+        int userId = order.getUser_ID();
+        User user = userMapper.getUserByID(userId);
         Mail mail = new Mail();
         mail.setFrom(from);
 

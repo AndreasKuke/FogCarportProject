@@ -74,12 +74,15 @@
                         <span th:case="'accepted'">✅ Accepteret</span>
                         <span th:case="'denied'">❌ Afvist</span>
                         </span>
+                        <form th:action="@{'/user/payment/' + ${order.order_ID}}" method="POST">
+                            <button class="pay-button">Betal nu</button>
+                        </form>
                     </td>
 
                 </tr>
                 </tbody>
             </table>
-            <button class="pay-button">Betal nu</button>
+
 
         </div>
 
