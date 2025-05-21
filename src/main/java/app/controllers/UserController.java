@@ -19,7 +19,7 @@ import java.util.List;
 
 public class UserController {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(
-            "postgres", "postgres", "jdbc:postgresql://localhost:5432/%s?currentSchema=public", "carport"
+            "postgres", "postgres", "jdbc:postgresql://46.101.133.216:5432/%s?currentSchema=public", "carport"
     );
     private static final UserMapper userMapper = new UserMapper(connectionPool);
     private static final OrderMapper orderMapper = new OrderMapper(connectionPool);
@@ -115,6 +115,8 @@ public class UserController {
     public static void profilePage(Context ctx) {
         User user = ctx.sessionAttribute("currentUser");
         if (user != null) {
+            List<Order> orders = orderMapper.getOrdersByUserId(user.getUser_ID());
+            ctx.attribute("orders", orders);
                 ctx.render("profilePage.html");
         } else {
             ctx.redirect("/login");
