@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.config.EmailUtil;
 import app.config.PasswordUtil;
 import app.config.SvgUtil;
 import app.entities.Order;
@@ -44,6 +45,9 @@ public class UserController {
             Order order = orderMapper.getOrderById(orderId);
             String updateStatus = ctx.formParam("status-selection");
             order.setStatus(updateStatus);
+            if(updateStatus.equals("accepted")){
+                EmailUtil.sendFinalConfirmation(ctx, order);
+            }
             orderMapper.updateOrderStatus(order);
             ctx.redirect("/adminPage");
         });
