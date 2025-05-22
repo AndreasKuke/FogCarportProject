@@ -64,7 +64,7 @@ public class SvgUtil {
     }
 
     public void addPoles(double carportLength, double carportWidth){
-        int numberOfPoles = 4;
+        int numberOfPoles = 2;
         int length = (int)carportLength;
         int maxPoleDistance = 310;
         int initialSpacing = 107;
@@ -74,13 +74,14 @@ public class SvgUtil {
 
 
         if (fullLength > 0) {
-            numberOfPoles = 2 * ((fullLength + maxPoleDistance - 1) / maxPoleDistance + 1)+1;
-        }
-        if (numberOfPoles < 4 ) {
+            int extraPoles = fullLength / maxPoleDistance;
+            numberOfPoles += extraPoles * 2;
+        } else {
             numberOfPoles = 4;
         }
 
         for(int i = 0; i < (numberOfPoles) / 2; i++){
+
             if(x > carportLength){
                 break;
             }
