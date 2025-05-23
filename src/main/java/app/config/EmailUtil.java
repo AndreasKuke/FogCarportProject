@@ -6,6 +6,7 @@ import app.entities.User;
 import app.exceptions.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.PartsListMapper;
+import app.persistence.UserMapper;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
@@ -36,6 +37,8 @@ public class EmailUtil {
     private static final String DB = "carport";
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
+    private static UserMapper userMapper = new UserMapper(connectionPool);
+
     //Template ID's taken from SendGrid.com
     private static final String OrderConfirmationID = "d-1b6aefc418c3427880a7df567316899d";
     private static final String FinalConfirmationID = "d-11983f5f46e74b7eb645130c19ca529c";
@@ -54,11 +57,9 @@ public class EmailUtil {
         personalization.addDynamicTemplateData("number", user.getPhoneNumber());
 
         Attachments attachment = createSvgAttachment(order);
-        Attachments attachment2 = createPartListAttachment(order);
 
         mail.addPersonalization(personalization);
         mail.addAttachments(attachment);
-        mail.addAttachments(attachment2);
         mail.addCategory("carport");
         mail.setTemplateId(OrderConfirmationID);
 
@@ -80,7 +81,8 @@ public class EmailUtil {
     }
 
     public static void sendFinalConfirmation(Context ctx, Order order){
-        User user = ctx.sessionAttribute("currentUser");
+        int userId = order.getUser_ID();
+        User user = userMapper.getUserByID(userId);
         Mail mail = new Mail();
         mail.setFrom(from);
 

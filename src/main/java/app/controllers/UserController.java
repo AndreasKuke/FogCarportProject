@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.config.EmailUtil;
 import app.config.PasswordUtil;
 import app.config.SvgUtil;
 import app.entities.Order;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class UserController {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(
-            "postgres", "postgres", "jdbc:postgresql://localhost:5432/%s?currentSchema=public", "carport"
+            "postgres", "postgres", "jdbc:postgresql://46.101.133.216:5432/%s?currentSchema=public", "carport"
     );
     private static final UserMapper userMapper = new UserMapper(connectionPool);
     private static final OrderMapper orderMapper = new OrderMapper(connectionPool);
@@ -34,6 +35,7 @@ public class UserController {
         app.post("/logout", UserController::logout);
         app.get("/profilePage", UserController::profilePage);
         app.get("/adminPage", UserController::adminPage);
+        app.post("/profilePage", UserController::profilePage);
 
         app.get("/admin/partsListPage/{orderId}", ctx ->{
             showPartsListPage(ctx);
@@ -44,8 +46,17 @@ public class UserController {
             Order order = orderMapper.getOrderById(orderId);
             String updateStatus = ctx.formParam("status-selection");
             order.setStatus(updateStatus);
+            if(updateStatus.equals("accepted")){
+                EmailUtil.sendFinalConfirmation(ctx, order);
+            }
             orderMapper.updateOrderStatus(order);
             ctx.redirect("/adminPage");
+        });
+        app.post("/user/payment/{orderId}", ctx -> {
+            int orderId = Integer.parseInt(ctx.pathParam("orderId"));
+            Order order = orderMapper.getOrderById(orderId);
+            EmailUtil.sendPaymentConfirmation(ctx, order);
+            ctx.redirect("/profilePage");
         });
     }
 
@@ -111,6 +122,8 @@ public class UserController {
     public static void profilePage(Context ctx) {
         User user = ctx.sessionAttribute("currentUser");
         if (user != null) {
+            List<Order> orders = orderMapper.getOrdersByUserId(user.getUser_ID());
+            ctx.attribute("orders", orders);
                 ctx.render("profilePage.html");
         } else {
             ctx.redirect("/login");
