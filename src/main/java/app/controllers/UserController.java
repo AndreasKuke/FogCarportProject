@@ -1,5 +1,6 @@
 package app.controllers;
 
+import app.Main;
 import app.config.EmailUtil;
 import app.config.PasswordUtil;
 import app.config.SvgUtil;
@@ -16,6 +17,7 @@ import io.javalin.http.Context;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class UserController {
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(
