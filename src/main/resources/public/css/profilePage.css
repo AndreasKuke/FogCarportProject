@@ -40,7 +40,7 @@
     background-color: #f0f0f0;
 }
 .pay-button {
-    margin-top: 20px;
+    margin-top: 0;
     padding: 8px 16px;
     background-color: #007bff; /* blue */
     color: white;
@@ -49,12 +49,39 @@
     font-size: 14px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    float: right; /* aligns button to the right */
-    width: auto; /* makes button width fit content */
+    float: right;
+    width: auto;
     display: inline-block;
 }
 
+.pay-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
 .pay-button:hover {
     background-color: #0056b3;
+}
+
+.status-pay-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .profile-wrapper {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .orders, .user-info {
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 20px; /* spacing between stacked boxes */
+    }
 }
 

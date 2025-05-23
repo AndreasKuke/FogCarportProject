@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserMapper {
 
@@ -123,4 +125,33 @@ public class UserMapper {
             throw new RuntimeException(e);
         }
     }
+
+    public List<User> getAllUsers() {
+        String sql = "SELECT * FROM users";
+        List<User> userList = new ArrayList<>();
+
+        try (Connection conn = connectionPool.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                User user = new User(
+                        rs.getInt("user_id"),
+                        rs.getString("user_name"),
+                        rs.getString("user_password"),
+                        rs.getString("user_mail"),
+                        rs.getString("user_phonenumber"),
+                        rs.getBoolean("user_role")
+                );
+                userList.add(user);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return userList;
+    }
+
 }

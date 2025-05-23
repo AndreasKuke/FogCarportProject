@@ -11,10 +11,10 @@
     <div class="header-div">
         <section class="topbar">
             <ul class="topbar-list">
-                <li><span>30 dages returret</span></li>
-                <li><span>Klik og hent inden for 3 timer*</span></li>
-                <li><span>1-3 dages levering*</span></li>
-                <li><span>Lån en trailer gratis</span></li>
+                <li><a href="/index">30 dages returret</a></li>
+                <li><a href="/index">Klik og hent inden for 3 timer*</a></li>
+                <li><a href="/index">1-3 dages levering*</a></li>
+                <li><a href="/index">Lån en trailer gratis</a></li>
             </ul>
         </section>
 
@@ -23,7 +23,6 @@
             <img src="/images/FogLogo.png" alt="Logo" class="logo">
         </a>
 
-        <!-- Need functionability for redirecting to login if not logged in or redirect to account-->
         <a>Bolig og design</a>
         <a>Byggematerialer</a>
         <a>El og belysning</a>
@@ -39,15 +38,13 @@
             <input type="text" placeholder="Søg..." class="search-bar-text">
             <button title="Nulstil din søgning" aria-hidden="false" class="reset-search-button"></button>
         </search>
-        <a th:href="${session.currentUser != null} ? '/profilePage' : '/login'">Fog Konto</a>
-        <a href="/checkout">
-            <!-- Needs new img -->
-            <img src="/images/shoppingcart.png" alt="Basket" class="basket" style="width: 50px; height: 50px;">
-            <span>Kurv</span>
+        <a th:if="${session.currentUser != null}" th:href="'/profilePage'" th:text="${session.currentUser.email}"></a>
+
+        <a th:if="${session.currentUser == null}" href="/login">Fog Konto</a>
+
+        <a href="/index">
+            <img src="/images/ShoppingCart.png" alt="Kurv" class="basket" style="width: 50px; height: 50px;">
         </a>
-        <li style="float:right" th:if="${session.currentUser != null}">
-            <a th:text="${session.currentUser.email}"></a>
-        </li>
     </nav>
     </div>
 </header>
