@@ -40,7 +40,7 @@ public static void OrderCreate(Context ctx) {
         int width = Integer.parseInt(ctx.formParam("carport-width-selection"));
         int length = Integer.parseInt(ctx.formParam("carport-length-selection"));
         Date date = new Date(System.currentTimeMillis());
-        boolean status = false;
+        String status = "pending";
         int price; // Not final. Den skal tage fat i stykliste prisen.
 
         int userID = currentUser.getUser_ID();
@@ -74,7 +74,7 @@ public static void OrderCreate(Context ctx) {
         ctx.attribute("message","Din ordre er nu blevet afsendt og vi vil få en til at kigge på den!");
         ctx.render("orderConfirmationPage.html"); // Bare en idé til en ny HTML side.
 
-        //EmailUtil.SendOrderConfirmation(ctx, order);
+        // EmailUtil.SendOrderConfirmation(ctx, order);
         //"Af"-kommenteres for at begynde at sende mails af sted ved oprettelse af ordre
     } catch (Exception e) {
         e.printStackTrace();

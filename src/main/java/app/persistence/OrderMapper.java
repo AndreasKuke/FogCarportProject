@@ -39,7 +39,7 @@ public class OrderMapper {
                         rs.getInt("carport_width"),
                         rs.getInt("carport_length"),
                         rs.getDate("date"),
-                        rs.getBoolean("status"),
+                        rs.getString("status"),
                         rs.getInt("price")
                 );
             }
@@ -51,7 +51,7 @@ public class OrderMapper {
 
     public void insertOrder(Order order) throws DatabaseException {
         String sql = "INSERT into orders (carport_width, carport_length, date, status, user_id, price) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?::status, ?, ?)";
 
         try (Connection conn = connectionPool.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -59,7 +59,7 @@ public class OrderMapper {
             stmt.setInt(1, order.getCarport_width());
             stmt.setInt(2, order.getCarport_length());
             stmt.setDate(3, order.getDate());
-            stmt.setBoolean(4,order.isStatus());
+            stmt.setString(4,order.getStatus());
             stmt.setInt(5, order.getUser_ID());
             stmt.setInt(6, order.getPrice());
 
@@ -100,7 +100,7 @@ public class OrderMapper {
                         Date date = rs.getDate("date");
                         int width = rs.getInt("carport_width");
                         int length = rs.getInt("carport_length");
-                        boolean status = rs.getBoolean("status");
+                        String status = rs.getString("status");
                         int price = rs.getInt("price");
 
                 String userEmail = userMapper.getUserEmailByID(user_id);
@@ -132,12 +132,12 @@ public class OrderMapper {
     }
 
     public void updateOrderStatus(Order order){
-        String sql = "UPDATE orders SET status = ? WHERE order_id = ?";
+        String sql = "UPDATE orders SET status = ?::status WHERE order_id = ?";
 
         try (Connection conn = connectionPool.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)){
 
-            stmt.setBoolean(1,order.isStatus());
+            stmt.setString(1,order.getStatus());
             stmt.setInt(2,order.getOrder_ID());
             stmt.executeUpdate();
         } catch (SQLException e) {
