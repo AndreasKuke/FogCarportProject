@@ -201,6 +201,7 @@ public class EmailUtil {
             attachment.setDisposition("attachment");
 
             return attachment;
+
         } catch (DatabaseException e) {
             throw new RuntimeException("Could not create CSV attachment", e);
         }
