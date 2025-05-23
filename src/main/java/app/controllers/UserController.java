@@ -38,6 +38,7 @@ public class UserController {
         app.get("/profilePage", UserController::profilePage);
         app.get("/adminPage", UserController::adminPage);
         app.post("/profilePage", UserController::profilePage);
+        app.get("/adminUserList", UserController::adminUserList);
 
         app.get("/admin/partsListPage/{orderId}", ctx ->{
             showPartsListPage(ctx);
@@ -60,6 +61,7 @@ public class UserController {
             EmailUtil.sendPaymentConfirmation(ctx, order);
             ctx.redirect("/profilePage");
         });
+
     }
 
 
@@ -185,5 +187,18 @@ public class UserController {
             throw new RuntimeException(e);
         }
     }
+
+    public static void adminUserList(Context ctx) {
+        User user = ctx.sessionAttribute("currentUser");
+
+        if (user != null && user.isAdmin()) {
+            List<User> users = userMapper.getAllUsers();
+            ctx.attribute("users", users);
+            ctx.render("adminUserList.html");
+        } else {
+            ctx.redirect("/login");
+        }
+    }
+
 
 }

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const payButton = document.querySelectorAll('.pay-button');
+    const payButton = document.querySelectorAll('.pay-button:not(:disabled)');
     payButton.forEach(button => {
         button.addEventListener('click', event => {
             event.preventDefault();

@@ -6,7 +6,7 @@
     position: relative;
     display: flex;
     flex-direction: row;
-    gap: 5px;
+    gap: 50px;
     -webkit-box-align: center;
     align-items: center;
     -webkit-box-pack: center;
@@ -58,7 +58,6 @@
     gap: 20px;
 }
 
-/* Optional: style the button for better spacing */
 .button {
     align-self: flex-start;
     padding: 10px 20px;
