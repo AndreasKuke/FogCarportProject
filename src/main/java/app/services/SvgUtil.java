@@ -1,4 +1,4 @@
-package app.config;
+package app.services;
 
 import app.entities.Order;
 

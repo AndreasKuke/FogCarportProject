@@ -1,4 +1,4 @@
-package app.config;
+package app.services;
 
 import app.entities.Order;
 import app.entities.PartsList;
@@ -117,8 +117,7 @@ public class EmailUtil {
     }
 
     public static void sendPaymentConfirmation(Context ctx, Order order){
-        int userId = order.getUser_ID();
-        User user = userMapper.getUserByID(userId);
+        User user = ctx.sessionAttribute("currentUser");
         Mail mail = new Mail();
         mail.setFrom(from);
 
