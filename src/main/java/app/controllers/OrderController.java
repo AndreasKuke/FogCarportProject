@@ -1,7 +1,7 @@
 package app.controllers;
 
-import app.config.EmailUtil;
-import app.config.SvgUtil;
+import app.services.EmailUtil;
+import app.services.SvgUtil;
 import app.entities.Order;
 import app.entities.PartsList;
 import app.entities.User;
@@ -9,13 +9,9 @@ import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import app.persistence.PartsListMapper;
 import app.services.Calculator;
-import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.time.Instant;
-import java.util.Calendar;
 import java.util.List;
 
 public class OrderController {

@@ -1,4 +1,4 @@
-package app.config;
+package app.services;
 
 import org.mindrot.jbcrypt.BCrypt;
 
