@@ -26,30 +26,6 @@ public class PriceController {
         app.get("/calculate-price", ctx -> calculatePrice(ctx));
     }
 
-//    private void calculatePrice(Context ctx) {
-//        try {
-//            int length = Integer.parseInt(ctx.queryParam("carport-length-selection"));
-//            int width = Integer.parseInt(ctx.queryParam("carport-width-selection"));
-//
-//            // Simulated order that currentUser will be using to see guiding price
-//            Order tempOrder = new Order(0, 0, null, width, length, false, 0);
-//
-//            int poles = calcPolesQuantity(tempOrder);
-//            int beams = calcBeamsQuantity(tempOrder);
-//            int rafters = calcRaftersQuantity(tempOrder);
-//
-//            // Get prices from our database
-//            int polePrice = getPriceByName("97x97 mm. trykimp. Stolpe") * 3; // pole * 3 meters
-//            int beamPrice = getPriceByName("45x195 mm. spærtræ ubh.") * length/100;
-//            int rafterPrice = getPriceByName("45x195 mm. spærtræ ubh.") * width/100;
-//
-//            int totalPrice = poles * polePrice + beams * beamPrice + rafters * rafterPrice;
-//
-//            ctx.json(totalPrice);
-//        }catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
     private void calculatePrice(Context ctx) {
         try {
             int length = Integer.parseInt(ctx.queryParam("carport-length-selection"));

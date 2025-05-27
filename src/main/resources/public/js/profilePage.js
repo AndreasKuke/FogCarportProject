@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             alert('Betaling bekræftet! Du vil få sendt en mail med stykliste hurtigst muligt.');
 
-            // Submit button complete
             button.closest('form').submit();
         });
     })
