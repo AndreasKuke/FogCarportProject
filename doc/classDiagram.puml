@@ -27,7 +27,6 @@ Class Part {
 - int unit
 }
 
-
 Package util {
 class Calculator{
 +void calcPoles(Order order)
@@ -60,10 +59,6 @@ class SvgUtil {
     +void addPoles(double carportLength, double carportWidth)
 }
 
-Class CarportMapper{
-
-}
-
 class OrderMapper{
 +Order getOrder(int id)
 +void insertOrder(Order order)
@@ -88,10 +83,6 @@ class UserMapper {
     +String getUserEmailByID(int user_id)
 }
 
-Class CarportController{
-
-}
-
 class PriceController {
     +PriceController(ConnectionPool connectionPool)
     +void routes(Javalin app)
@@ -105,10 +96,6 @@ class PriceController {
 class OrderController {
     +OrderController(ConnectionPool connectionPool)
     +static void OrderCreate(Context ctx)
-}
-
-Class PartController{
-
 }
 
 Class UserController{
