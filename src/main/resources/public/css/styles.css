@@ -35,7 +35,7 @@
 
 .content-wrapper {
     background-color: #F5F5F3;
-    padding: 40px 20px; /* Top/bottom space around the whole section */
+    padding: 40px 20px;
 }
 
 .container {
@@ -47,10 +47,10 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
-    gap: 20px; /* space between internal elements */
+    gap: 20px;
 }
 
-/* Optional: give space between selects */
+
 .selection {
     border-radius: 25px;
     display: flex;

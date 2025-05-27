@@ -2,8 +2,7 @@
 !pragma layout smetana
 
 User --* Order
-Order --* Carport
-Carport --* Part
+Order --* Part
 
 Class User {
 - int id
@@ -28,9 +27,6 @@ Class Part {
 - int unit
 }
 
-Class Carport {
-- ArrayList <Part> partList
-}
 
 Package util {
 class Calculator{

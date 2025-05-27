@@ -43,7 +43,6 @@
     outline: none;
 }
 
-/* Paragraph with link below form */
 .container p {
     margin-top: 20px;
     font-size: 0.9rem;
@@ -59,7 +58,6 @@
     text-decoration: underline;
 }
 
-/* Responsive container padding */
 @media (max-width: 480px) {
     .container {
         padding: 20px 20px;
